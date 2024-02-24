@@ -4,7 +4,6 @@ import { useRouter } from "next/navigation"
 import { useEffect, useState } from "react"
 import Link from "next/link"
 import { SlArrowDown } from "react-icons/sl"
-import Image from "next/image"
 
 export default function LangDropDown({ lang }: { lang: Locale }) {
 	const router = useRouter()
