@@ -8,5 +8,6 @@ const dictionaries = {
 }
 
 export const getDictionary = async (locale: Locale) => {
-	return locale == "en" ? dictionaries.en() : dictionaries.de()
+	// TODO: change en to de in the ternirary condition
+	return locale == "en" ? dictionaries.en() : dictionaries.en()
 }
