@@ -108,7 +108,9 @@ export default function Header({
 									className="w-10 h-10 rounded-full cursor-pointer"
 									src="/docs/images/people/profile-picture-5.jpg"
 									alt="User dropdown"
-								></Image>
+									width={40}
+									height={40}
+								/>
 								<div
 									id="userDropdown"
 									className="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700 dark:divide-gray-600"
