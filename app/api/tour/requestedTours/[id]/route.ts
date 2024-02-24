@@ -6,16 +6,16 @@ import { getToken } from "next-auth/jwt"
 import { checkRoles } from "@/app/utils/auth"
 import { TourModel } from "@/app/database/schemas/tour.schema"
 import { JwtInterface } from "@/app/interfaces/jwt.interface"
-import { UserModel } from "@/app/database/schemas/user.schema"
+import { TourStatus } from "@/app/enums/tour.enum"
+import { QuotationModel } from "@/app/database/schemas/quotation.schema"
 
-const createRoles = [[UserStatus.APPROVED, UserRole.ADMIN]]
+const createRoles = [[UserStatus.APPROVED, UserRole.USER]]
 
-// * Get all organizers
-export async function GET(request: NextRequest) {
+// * Get all requested tours
+export async function GET(request: NextRequest, { params }: any) {
 	try {
-		const req = await request.json()
-		// Connect to the database
 		await db.connect()
+		const tourID = params.id as ObjectId
 
 		// Get the JWT token from the request
 		// TODO: Deal with the jwt type
@@ -35,48 +35,32 @@ export async function GET(request: NextRequest) {
 				{ status: 401 }
 			)
 		}
-		// const organizers = await UserModel.find({ role: UserRole.PARTNER })
 
-		// TODO: Look into this aggregation pipeline maybe
-		const organizers = await TourModel.aggregate([
-			{
-				$lookup: {
-					from: "users",
-					localField: "organizerID",
-					foreignField: "_id",
-					as: "user"
-				}
-			},
-			{
-				$unwind: "$user"
-			},
-			{
-				$group: {
-					_id: {
-						fistName: "$firstName"
-					},
-					count: {
-						$sum: 1
-					}
-				}
-			},
-			{
-				$project: {
-					// interviewVenue: "$interviewVenue"
-					firstName: "$firstName",
-					lastName: "$lastName",
-					count: 1
-				}
-			}
-		])
+		const organizerID = authToken.user._id
+
+		const tour = await TourModel.findById(tourID)
+
+		if (tour?.organizerID?.toString() != organizerID.toString())
+			return NextResponse.json(
+				{
+					success: false,
+					message: "Unauthorized",
+					error: "You do not have permission to perform this action"
+				},
+				{ status: 401 }
+			)
+
+		// get quotations
+		const quotations = await QuotationModel.find({ tourID })
 
 		// Return success response
 		return NextResponse.json(
 			{
 				success: true,
-				message: "Organizers fetched",
+				message: "Tours fetched succesfully",
 				data: {
-					organizers
+					tour,
+					quotations
 				}
 			},
 			{ status: 200 }
@@ -85,7 +69,7 @@ export async function GET(request: NextRequest) {
 		return NextResponse.json(
 			{
 				success: false,
-				message: "An error occurred while fetching the organizers",
+				message: "An error occurred while fetching the tours",
 				error: error?.message || "Internal Server Error"
 			},
 			{ status: 500 }
