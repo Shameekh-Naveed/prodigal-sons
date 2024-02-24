@@ -2,49 +2,57 @@ import { Button } from "@/components/ui/button"
 import { Locale } from "@/i18n.config"
 import { getDictionary } from "@/lib/dictionaries"
 
-export default async function Page({ params }: { params: { lang: Locale } }) {
+export default async function Page({
+	params
+}: {
+	params: { lang: Locale; slug: string }
+}) {
+	const tourData = await fetchData(params.slug)
+	console.log({ tourData })
 	const { tripSlug } = await getDictionary(params.lang)
-	const trip = {
-		title: "something",
-		description:
-			"something something something something something something something something something something something something something something something something something something something something something something something something something something something something something something something something something something something something something something something something something something something something something something something something something something ",
-		departure: new Date().toISOString().slice(0, 10),
-		arrival: new Date().toISOString().slice(0, 10),
-		organizerID: "1234567890",
-		itinerary: [
-			{
-				title: "something",
-				description:
-					"Lorem ipsum dolor sit amet consectetur adipisicing elit. Tempore voluptatibus voluptates minus consequatur eligendi explicabo aut quas necessitatibus est, eaque, consequuntur velit quod! Rem atque saepe eius magnam, illo voluptatum!",
-				day: 4,
-				nightStay: "yes"
-			},
-			{
-				title: "something",
-				description:
-					"Lorem ipsum dolor sit amet consectetur adipisicing elit. Tempore voluptatibus voluptates minus consequatur eligendi explicabo aut quas necessitatibus est, eaque, consequuntur velit quod! Rem atque saepe eius magnam, illo voluptatum!",
-				day: 4,
-				nightStay: "yes"
-			},
-			{
-				title: "something",
-				description:
-					"Lorem ipsum dolor sit amet consectetur adipisicing elit. Tempore voluptatibus voluptates minus consequatur eligendi explicabo aut quas necessitatibus est, eaque, consequuntur velit quod! Rem atque saepe eius magnam, illo voluptatum!",
-				day: 4,
-				nightStay: "yes"
-			},
-			{
-				title: "something",
-				description:
-					"Lorem ipsum dolor sit amet consectetur adipisicing elit. Tempore voluptatibus voluptates minus consequatur eligendi explicabo aut quas necessitatibus est, eaque, consequuntur velit quod! Rem atque saepe eius magnam, illo voluptatum!",
-				day: 4,
-				nightStay: "yes"
-			}
-		],
-		totalAmount: 123456,
-		status: "pending",
-		type: "religious"
-	}
+
+	// const trip = {
+	// 	title: "something",
+	// 	description:
+	// 		"something something something something something something something something something something something something something something something something something something something something something something something something something something something something something something something something something something something something something something something something something something something something something something something something something something ",
+	// 	departure: new Date().toISOString().slice(0, 10),
+	// 	arrival: new Date().toISOString().slice(0, 10),
+	// 	organizerID: "1234567890",
+	// 	itinerary: [
+	// 		{
+	// 			title: "something",
+	// 			description:
+	// 				"Lorem ipsum dolor sit amet consectetur adipisicing elit. Tempore voluptatibus voluptates minus consequatur eligendi explicabo aut quas necessitatibus est, eaque, consequuntur velit quod! Rem atque saepe eius magnam, illo voluptatum!",
+	// 			day: 4,
+	// 			nightStay: "yes"
+	// 		},
+	// 		{
+	// 			title: "something",
+	// 			description:
+	// 				"Lorem ipsum dolor sit amet consectetur adipisicing elit. Tempore voluptatibus voluptates minus consequatur eligendi explicabo aut quas necessitatibus est, eaque, consequuntur velit quod! Rem atque saepe eius magnam, illo voluptatum!",
+	// 			day: 4,
+	// 			nightStay: "yes"
+	// 		},
+	// 		{
+	// 			title: "something",
+	// 			description:
+	// 				"Lorem ipsum dolor sit amet consectetur adipisicing elit. Tempore voluptatibus voluptates minus consequatur eligendi explicabo aut quas necessitatibus est, eaque, consequuntur velit quod! Rem atque saepe eius magnam, illo voluptatum!",
+	// 			day: 4,
+	// 			nightStay: "yes"
+	// 		},
+	// 		{
+	// 			title: "something",
+	// 			description:
+	// 				"Lorem ipsum dolor sit amet consectetur adipisicing elit. Tempore voluptatibus voluptates minus consequatur eligendi explicabo aut quas necessitatibus est, eaque, consequuntur velit quod! Rem atque saepe eius magnam, illo voluptatum!",
+	// 			day: 4,
+	// 			nightStay: "yes"
+	// 		}
+	// 	],
+	// 	totalAmount: 123456,
+	// 	status: "pending",
+	// 	type: "religious"
+	// }
+
 	return (
 		<main
 			className="min-h-[calc(100vh-192px)] p-10 pb-0 bg-center bg-cover"
@@ -57,26 +65,28 @@ export default async function Page({ params }: { params: { lang: Locale } }) {
 					<h1 className="font-bold text-3xl">{tripSlug.yourTrip}</h1>
 					<div className="border w-full border-primary max-w-2xl" />
 					<div className="w-full">
-						<h2 className="font-semibold text-2xl">{trip.title}</h2>
+						<h2 className="font-semibold text-2xl">
+							{tourData.title}
+						</h2>
 						<div className="flex flex-row gap-2 font-light">
 							<h2 className="">
-								{tripSlug.type}: {trip.type}
+								{tripSlug.type}: {tourData.type}
 							</h2>
 							<h2 className="">
-								{tripSlug.status}: {trip.status}
+								{tripSlug.status}: {tourData.status}
 							</h2>
 						</div>
 					</div>
-					<desc className="text-lg ">{trip.description}</desc>
+					<desc className="text-lg ">{tourData.description}</desc>
 					<h1></h1>
-					{trip.itinerary.map((itinerary: any, index: number) => (
+					{tourData.itinerary.map((itinerary: any, index: number) => (
 						<ol className="relative border-s border-gray-200 dark:border-gray-700">
 							<Itinerary itinerary={itinerary} key={index} />
 						</ol>
 					))}
 					<div className="flex flex-col items-end gap-4">
 						<h2 className="text-2xl font-semibold">
-							Rs. {trip.totalAmount}
+							Rs. {tourData.totalAmount}
 						</h2>
 						<div>
 							<Button>{tripSlug.checkout}</Button>
@@ -103,4 +113,13 @@ const Itinerary = ({ itinerary }: { itinerary: any }) => {
 			</p>
 		</li>
 	)
+}
+
+const fetchData = async (tourID: string) => {
+	try {
+		const res = await fetch(`/api/tour/${tourID}`)
+		const data = await res.json()
+		const output = data.tour
+		return output
+	} catch (error) {}
 }
