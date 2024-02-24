@@ -1,4 +1,5 @@
 "use client"
+import { Locale } from "@/i18n.config"
 import { ThemeProvider } from "next-themes"
 
 export default function Providers({ children }: { children: React.ReactNode }) {
