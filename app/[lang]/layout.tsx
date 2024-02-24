@@ -6,6 +6,7 @@ import Header from "@/components/Header"
 import Footer from "@/components/Footer"
 import Providers from "@/components/Providers"
 import { getDictionary } from "../../lib/dictionaries"
+import { Toaster } from "sonner"
 
 const inter = Inter({
 	subsets: ["latin"],
@@ -36,6 +37,7 @@ export default async function RootLayout({
 					<Header header={header} params={params} />
 					{children}
 					<Footer footer={footer} />
+					<Toaster />
 				</Providers>
 			</body>
 		</html>

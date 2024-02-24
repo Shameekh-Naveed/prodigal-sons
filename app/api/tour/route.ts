@@ -1,15 +1,18 @@
 import { NextRequest, NextResponse } from "next/server"
 import { ObjectId } from "mongoose"
 import { UserRole, UserStatus } from "@/app/enums/user.enum"
-import db from "@/app/utils/db"
 import { getToken } from "next-auth/jwt"
 import { checkRoles } from "@/app/utils/auth"
 import { TourModel } from "@/app/database/schemas/tour.schema"
 import { JwtInterface } from "@/app/interfaces/jwt.interface"
+import { TripSort } from "@/app/enums/filterParams.enum"
+import { TourStatus } from "@/app/enums/tour.enum"
+import db from "@/utils/db"
 
 const createRoles = [
 	[UserStatus.APPROVED, UserRole.PARTNER],
-	[UserStatus.APPROVED, UserRole.ADMIN]
+	[UserStatus.APPROVED, UserRole.ADMIN],
+	[UserStatus.APPROVED, UserRole.USER]
 ]
 
 // * Create a new tour
@@ -21,13 +24,13 @@ export async function POST(request: NextRequest) {
 
 		// Get the JWT token from the request
 		// TODO: Deal with the jwt type
-		const authToken = (await getToken({
+		const JwtToken = await getToken({
 			req: request,
 			secret: process.env.JWT_SECRET
-		})) as unknown as JwtInterface
+		})
 
 		// Check if user is authenticated and has the desired role
-		if (!authToken || !checkRoles(createRoles, authToken)) {
+		if (!JwtToken || !checkRoles(createRoles, JwtToken)) {
 			return NextResponse.json(
 				{
 					success: false,
@@ -37,6 +40,10 @@ export async function POST(request: NextRequest) {
 				{ status: 401 }
 			)
 		}
+		const authToken = JwtToken.accessToken as JwtInterface
+		const isPartner = authToken.roles.find(
+			role => role === UserRole.PARTNER
+		)
 
 		const {
 			title,
@@ -57,7 +64,8 @@ export async function POST(request: NextRequest) {
 			itinerary,
 			totalAmount,
 			type,
-			organizerID: authToken.user._id
+			organizerID: authToken.user._id,
+			status: isPartner ? TourStatus.APPROVED : TourStatus.REQUESTED
 		})
 
 		// Save the order to the database
@@ -99,10 +107,17 @@ export async function GET(request: NextRequest, { params }: any) {
 		const { searchParams } = new URL(request.url)
 		const pageParam = +(searchParams.get("page") || 0)
 		const limitParam = +(searchParams.get("limit") || 0)
+
 		const [limit, skip] = paginationParser(pageParam, limitParam)
 
+		const { sort, filters } = getTripFilters(searchParams)
+
 		// get all tours
-		const tours = await TourModel.find().skip(skip).limit(limit)
+		const tours = await TourModel.find(filters)
+			.populate("organizerID")
+			.sort(sort)
+			.skip(skip)
+			.limit(limit)
 
 		// Return success response
 		return NextResponse.json(
@@ -128,4 +143,40 @@ export async function GET(request: NextRequest, { params }: any) {
 		// Disconnect from the database
 		await db.disconnect()
 	}
+}
+
+const getTripFilters = (searchParams: URLSearchParams) => {
+	const orderBy =
+		(searchParams.get("sort") as TripSort) || TripSort.CREATED_DEC
+	const searchQuery = searchParams.get("query") || ""
+	const words = searchQuery.split(/\s+/).filter(word => word !== "")
+	const regexPattern = words.map(word => new RegExp(word, "i"))
+	const filters: any = {
+		status: TourStatus.APPROVED
+	}
+	const sort: any = {}
+	if (words.length > 0) {
+		filters.name = regexPattern
+		filters.description = regexPattern
+	}
+
+	switch (orderBy) {
+		case TripSort.CREATED_DEC:
+			sort.createdAt = "desc"
+			break
+		case TripSort.DEPARTURE_ASC:
+			sort.departure = "asc"
+			break
+		case TripSort.DEPARTURE_DEC:
+			sort.departure = "desc"
+			break
+		case TripSort.PRICE_ASC:
+			sort.price = "asc"
+			break
+		case TripSort.PRICE_DEC:
+			sort.price = "desc"
+			break
+	}
+
+	return { sort, filters }
 }

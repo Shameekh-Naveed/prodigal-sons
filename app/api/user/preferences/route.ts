@@ -1,17 +1,21 @@
 import { NextRequest, NextResponse } from "next/server"
 import { ObjectId } from "mongoose"
 import { UserRole, UserStatus } from "@/app/enums/user.enum"
-import db from "@/utils/db"
 import { getToken } from "next-auth/jwt"
 import { checkRoles } from "@/app/utils/auth"
 import { TourModel } from "@/app/database/schemas/tour.schema"
 import { JwtInterface } from "@/app/interfaces/jwt.interface"
+import { TripSort } from "@/app/enums/filterParams.enum"
+import { TourStatus } from "@/app/enums/tour.enum"
+import db from "@/utils/db"
+import { UserModel } from "@/app/database/schemas/user.schema"
 
-const roles = [[UserStatus.APPROVED, UserRole.PARTNER]]
+const createRoles = [[UserStatus.APPROVED, UserRole.USER]]
 
-// * Get all tours of an organizer
-export async function GET(request: NextRequest, { params }: any) {
+export async function POST(request: NextRequest) {
 	try {
+		const req = await request.json()
+		// Connect to the database
 		await db.connect()
 
 		// Get the JWT token from the request
@@ -22,7 +26,7 @@ export async function GET(request: NextRequest, { params }: any) {
 		})
 
 		// Check if user is authenticated and has the desired role
-		if (!JwtToken || !checkRoles(roles, JwtToken))
+		if (!JwtToken || !checkRoles(createRoles, JwtToken)) {
 			return NextResponse.json(
 				{
 					success: false,
@@ -31,29 +35,30 @@ export async function GET(request: NextRequest, { params }: any) {
 				},
 				{ status: 401 }
 			)
+		}
 		const authToken = JwtToken.accessToken as JwtInterface
 
-		const organizerID = authToken.user._id.toString()
+		const userID = authToken.user._id
+		const { preferences } = req
 
-		// get all tours
-		const tour = await TourModel.find({ organizerID })
+		const update = UserModel.findByIdAndUpdate(userID, { preferences })
 
 		// Return success response
 		return NextResponse.json(
 			{
 				success: true,
-				message: "Tour fetched succesfully",
+				message: "Tour initalized successfully",
 				data: {
-					tour
+					message: "Success"
 				}
 			},
-			{ status: 200 }
+			{ status: 201 }
 		)
 	} catch (error: any) {
 		return NextResponse.json(
 			{
 				success: false,
-				message: "An error occurred while fetching the tour",
+				message: "An error occurred while performing this action",
 				error: error?.message || "Internal Server Error"
 			},
 			{ status: 500 }

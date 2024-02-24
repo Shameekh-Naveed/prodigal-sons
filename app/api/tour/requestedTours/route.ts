@@ -6,13 +6,19 @@ import { getToken } from "next-auth/jwt"
 import { checkRoles } from "@/app/utils/auth"
 import { TourModel } from "@/app/database/schemas/tour.schema"
 import { JwtInterface } from "@/app/interfaces/jwt.interface"
+import { TourStatus } from "@/app/enums/tour.enum"
 
-const roles = [[UserStatus.APPROVED, UserRole.PARTNER]]
+const createRoles = [[UserStatus.APPROVED, UserRole.USER]]
 
-// * Get all tours of an organizer
+// * Get all requested tours
 export async function GET(request: NextRequest, { params }: any) {
 	try {
 		await db.connect()
+
+		const { searchParams } = new URL(request.url)
+		const pageParam = +(searchParams.get("page") || 0)
+		const limitParam = +(searchParams.get("limit") || 0)
+		const [limit, skip] = paginationParser(pageParam, limitParam)
 
 		// Get the JWT token from the request
 		// TODO: Deal with the jwt type
@@ -22,7 +28,7 @@ export async function GET(request: NextRequest, { params }: any) {
 		})
 
 		// Check if user is authenticated and has the desired role
-		if (!JwtToken || !checkRoles(roles, JwtToken))
+		if (!JwtToken || !checkRoles(createRoles, JwtToken)) {
 			return NextResponse.json(
 				{
 					success: false,
@@ -31,20 +37,21 @@ export async function GET(request: NextRequest, { params }: any) {
 				},
 				{ status: 401 }
 			)
+		}
 		const authToken = JwtToken.accessToken as JwtInterface
 
-		const organizerID = authToken.user._id.toString()
+		const organizerID = authToken.user._id
 
 		// get all tours
-		const tour = await TourModel.find({ organizerID })
+		const tours = await TourModel.find({ organizerID })
 
 		// Return success response
 		return NextResponse.json(
 			{
 				success: true,
-				message: "Tour fetched succesfully",
+				message: "Tours fetched succesfully",
 				data: {
-					tour
+					tours
 				}
 			},
 			{ status: 200 }
@@ -53,7 +60,7 @@ export async function GET(request: NextRequest, { params }: any) {
 		return NextResponse.json(
 			{
 				success: false,
-				message: "An error occurred while fetching the tour",
+				message: "An error occurred while fetching the tours",
 				error: error?.message || "Internal Server Error"
 			},
 			{ status: 500 }

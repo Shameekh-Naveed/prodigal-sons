@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server"
-import { ObjectId } from "mongoose"
+import { ObjectId, Types } from "mongoose"
 import { UserRole, UserStatus } from "@/app/enums/user.enum"
 import db from "@/utils/db"
 import { getToken } from "next-auth/jwt"
@@ -7,6 +7,8 @@ import { checkRoles } from "@/app/utils/auth"
 import { TourModel } from "@/app/database/schemas/tour.schema"
 import { JwtInterface } from "@/app/interfaces/jwt.interface"
 import { UserModel } from "@/app/database/schemas/user.schema"
+import { RegisterationModel } from "@/app/database/schemas/registeration.schema"
+import { PaymentStatus } from "@/app/enums/payment.enum"
 
 const createRoles = [[UserStatus.APPROVED, UserRole.ADMIN]]
 
@@ -35,48 +37,71 @@ export async function GET(request: NextRequest) {
 				{ status: 401 }
 			)
 		}
+
+		const authToken = JwtToken.accessToken as JwtInterface
+		const organizerID = authToken.user._id
 		// const organizers = await UserModel.find({ role: UserRole.PARTNER })
 
 		// TODO: Look into this aggregation pipeline maybe
-		const organizers = await TourModel.aggregate([
+		const registerations = await RegisterationModel.aggregate([
 			{
 				$lookup: {
-					from: "users",
-					localField: "organizerID",
+					from: "tours",
+					localField: "tourID",
 					foreignField: "_id",
-					as: "user"
+					as: "tour"
 				}
 			},
 			{
-				$unwind: "$user"
+				$unwind: "$tour"
 			},
 			{
-				$group: {
-					_id: {
-						fistName: "$firstName"
-					},
-					count: {
-						$sum: 1
-					}
-				}
-			},
-			{
-				$project: {
-					// interviewVenue: "$interviewVenue"
-					firstName: "$firstName",
-					lastName: "$lastName",
-					count: 1
+				$match: {
+					// "$tour.organizerID": new Types.ObjectId(organizerID.toString())
+					organizerID: new Types.ObjectId(organizerID.toString())
 				}
 			}
 		])
+
+		const month = new Date().getMonth()
+		let revenueMonth = 0,
+			revenuePrev = 0,
+			registerationsMonth = 0,
+			registerationsPrev = 0
+
+		const registerations_month = []
+		const registerations_prev = []
+		registerations.forEach(registeration => {
+			const registerationMonth = registeration.createdAt.toString()
+			if (registerationMonth === month) {
+				registerationsMonth++
+				if (registeration.paymentStatus === PaymentStatus.APPROVED)
+					revenueMonth += registeration.bill
+			} else if (registerationMonth === month - 1) {
+				registerationsPrev++
+				if (registeration.paymentStatus === PaymentStatus.APPROVED)
+					revenuePrev += registeration.bill
+			}
+		})
+
+		const stats = {
+			registerations: {
+				curr: registerationsMonth,
+				prev: registerationsPrev
+			},
+			revenue: {
+				curr: revenueMonth,
+				prev: revenuePrev
+			}
+		}
 
 		// Return success response
 		return NextResponse.json(
 			{
 				success: true,
-				message: "Organizers fetched",
+				message: "stats fetched",
 				data: {
-					organizers
+					stats
 				}
 			},
 			{ status: 200 }

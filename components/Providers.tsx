@@ -1,7 +1,11 @@
 "use client"
-import { Locale } from "@/i18n.config"
+import { Provider } from "jotai"
 import { ThemeProvider } from "next-themes"
 
 export default function Providers({ children }: { children: React.ReactNode }) {
-	return <ThemeProvider attribute="class">{children}</ThemeProvider>
+	return (
+		<ThemeProvider attribute="class">
+			<Provider>{children}</Provider>
+		</ThemeProvider>
+	)
 }
