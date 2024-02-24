@@ -1,6 +1,7 @@
 "use client"
 import { useState } from "react"
 import { Button } from "./ui/button"
+import { toast } from "sonner"
 
 type State = {
 	location: string
@@ -51,7 +52,25 @@ export default function CustomForm() {
 			setValues({ ...values, [prop]: event.target.value })
 		}
 
-	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {}
+	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+		e.preventDefault()
+		try {
+			const res = await fetch("/api/tour", {
+				method: "POST",
+				body: JSON.stringify(values)
+			})
+			const data = await res.json()
+			if (!res.ok) {
+				toast.error(data.message)
+				toast.error(data.error)
+			} else {
+				toast.success("Data added successfully!")
+			}
+		} catch (error) {
+			console.log({ error })
+			toast.error("Internal Server Error")
+		}
+	}
 
 	return (
 		<form className="flex flex-col gap-4 max-w-3xl" onSubmit={handleSubmit}>
