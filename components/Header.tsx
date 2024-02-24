@@ -5,47 +5,22 @@ import { FcIcons8Cup } from "react-icons/fc"
 import { useTheme } from "next-themes"
 import { Moon, Sun } from "lucide-react"
 import { RxHamburgerMenu } from "react-icons/rx"
+import { Locale } from "@/i18n.config"
+import LangDropDown from "./LangDropDown"
 
-export default function Header() {
-	const links = [
-		{
-			href: "/home",
-			label: "Home"
-		},
-		{
-			href: "/about",
-			label: "About"
-		},
-		{
-			href: "/contact",
-			label: "Contact"
-		},
-		{
-			href: "/blog",
-			label: "Blog"
-		},
-		{
-			href: "/projects",
-			label: "Projects"
-		}
-	]
-	const loggedInSettings = [
-		{
-			href: "/profile",
-			label: "Profile"
-		},
-		{
-			href: "/settings",
-			label: "Settings"
-		},
-		{
-			href: "/logout",
-			label: "Logout"
-		}
-	]
-
+export default function Header({
+	header,
+	params
+}: {
+	header: {
+		href: string
+		label: string
+	}[]
+	params: { lang: Locale }
+}) {
 	const { resolvedTheme, setTheme } = useTheme()
 	const [mounted, setMounted] = useState(false)
+	const links = [...header]
 	useEffect(() => {
 		setMounted(true)
 	}, [])
@@ -83,10 +58,11 @@ export default function Header() {
 					))}
 				</div>
 				<div className="flex flex-row gap-4">
+					<LangDropDown lang={params.lang} />
 					<button
 						aria-label="Toggle Dark Mode"
 						type="button"
-						className="flex items-center justify-center rounded-lg p-2 transition-colors hover:bg-zinc-300 dark:hover:bg-zinc-700 ml-2"
+						className="flex items-center justify-center rounded-lg p-2 transition-colors hover:bg-zinc-300 dark:hover:bg-zinc-700"
 						onClick={() => {
 							setTheme(
 								resolvedTheme === "dark" ? "light" : "dark"
