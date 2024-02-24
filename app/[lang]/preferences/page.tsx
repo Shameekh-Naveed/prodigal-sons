@@ -1,30 +1,60 @@
+"use client"
+import { useState, useEffect } from "react"
+
 const Preferences = () => {
+	const [travelStyle, setTravelStyle] = useState([] as string[])
+	const [travelSites, setTravelSites] = useState([] as string[])
+
+	const handleTravelStyle = (e: any) => {
+		setTravelStyle([...travelStyle, e.target.value])
+		console.log(travelStyle)
+	}
+
+	const handleTravelSites = (e: any) => {
+		setTravelSites([...travelSites, e.target.value])
+		console.log(travelSites)
+	}
+
+	useEffect(() => {
+		console.log(travelStyle)
+	}, [travelStyle])
+
+	useEffect(() => {
+		console.log(travelSites)
+	}, [travelSites])
+
 	return (
-		<main className="flex min-h-[calc(100vh-192px)] justify-end bg-primary">
-			<div className="my-auto text-center px-8">
-				<h1 className="text-white text-5xl font-semibold">
+		<main className="flex min-h-[calc(100vh-192px)] justify-end bg-secondary flex-col 2xl:flex-row">
+			<div className="my-auto text-center px-8 min-h-32 justify-center items-center flex">
+				<h1 className="text-primary text-4xl 2xl:text-5xl font-semibold ">
 					Let's start your travel journey
 				</h1>
 			</div>
-			<div className="lg:w-[70%] bg-white rounded-tl-3xl flex flex-col justify-center items-center">
-				<div className="flex flex-col w-[80%]">
-					<h1 className="text-xl mb-6">
+			<div className="w-full bg-primary rounded-t-3xl 2xl:rounded-tr-none  2xl:rounded-tl-3xl 2xl:rounded-bl-xl flex flex-col justify-center items-center 2xl:w-[70%] py-24">
+				<h1 className="text-4xl font-bold mb-6 text-secondary">
+					Select your preferred travel style
+				</h1>
+				<div className="flex flex-col w-[80%] my-8">
+					<h1 className="text-xl my-6 text-secondary">
 						Select your preferred travel style
 					</h1>
-					<ul className="flex justify-center">
-						<li className="mx-8">
+					<ul className="flex flex-wrap gap-6 justify-start 2xl:justify-center">
+						<li className="">
 							<input
 								type="checkbox"
-								id="react-option"
-								value=""
+								id="premium"
+								name="travelStyle"
+								value="premium"
 								className="hidden peer"
-								// required=""
+								onChange={e => {
+									handleTravelStyle(e)
+								}}
 							/>
 							<label
-								htmlFor="react-option"
-								className="inline-flex items-center justify-between w-full p-4 text-gray-500 bg-white border-2 border-gray-200 rounded-lg cursor-pointer dark:hover:text-gray-300 dark:border-gray-700 peer-checked:border-blue-600 hover:text-gray-600 dark:peer-checked:text-gray-300 peer-checked:text-gray-600 hover:bg-gray-50 dark:text-gray-400 dark:bg-gray-800 dark:hover:bg-gray-700"
+								htmlFor="premium"
+								className="inline-flex items-center justify-between w-full p-4 text-primary bg-white border-2 border-gray-200 rounded-lg cursor-pointer dark:hover:text-gray-300 dark:border-gray-700 peer-checked:border-blue-600 dark:peer-checked:text-blue-500 peer-checked:text-blue-500 hover:bg-gray-50  dark:bg-gray-800 dark:hover:bg-gray-700 hover:text-blue-500"
 							>
-								<div className="block">
+								<div className="block ">
 									<div className="w-full text-lg font-semibold">
 										Premium
 									</div>
@@ -34,16 +64,20 @@ const Preferences = () => {
 								</div>
 							</label>
 						</li>
-						<li className="mx-8">
+						<li className="">
 							<input
 								type="checkbox"
-								id="flowbite-option"
-								value=""
+								id="budget"
+								value="budget"
+								name="travelStyle"
 								className="hidden peer"
+								onChange={e => {
+									handleTravelStyle(e)
+								}}
 							/>
 							<label
-								htmlFor="flowbite-option"
-								className="inline-flex items-center justify-between w-full p-4 text-gray-500 bg-white border-2 border-gray-200 rounded-lg cursor-pointer dark:hover:text-gray-300 dark:border-gray-700 peer-checked:border-blue-600 hover:text-gray-600 dark:peer-checked:text-gray-300 peer-checked:text-gray-600 hover:bg-gray-50 dark:text-gray-400 dark:bg-gray-800 dark:hover:bg-gray-700"
+								htmlFor="budget"
+								className="inline-flex items-center justify-between w-full p-4 text-primary bg-white border-2 border-gray-200 rounded-lg cursor-pointer dark:hover:text-gray-300 dark:border-gray-700 peer-checked:border-blue-600 dark:peer-checked:text-blue-500 peer-checked:text-blue-500 hover:bg-gray-50  dark:bg-gray-800 dark:hover:bg-gray-700 hover:text-blue-500"
 							>
 								<div className="block">
 									<div className="w-full text-lg font-semibold">
@@ -57,29 +91,168 @@ const Preferences = () => {
 						</li>
 					</ul>
 				</div>
-				{/* <li>
-						<input
-							type="checkbox"
-							id="angular-option"
-							value=""
-							className="hidden peer"
-						/>
-						<label
-							htmlFor="angular-option"
-							className="inline-flex items-center justify-between w-full p-5 text-gray-500 bg-white border-2 border-gray-200 rounded-lg cursor-pointer dark:hover:text-gray-300 dark:border-gray-700 peer-checked:border-blue-600 hover:text-gray-600 dark:peer-checked:text-gray-300 peer-checked:text-gray-600 hover:bg-gray-50 dark:text-gray-400 dark:bg-gray-800 dark:hover:bg-gray-700"
-						>
-							<div className="block">
-								<div className="w-full text-lg font-semibold">
-									Angular
+				<div className="flex flex-col w-[80%]">
+					<h1 className="text-xl mb-6 text-secondary">
+						Select your preferred travelling sites
+					</h1>
+					<ul className="flex w-full gap-6 flex-wrap justify-start 2xl:justify-center">
+						<li className="">
+							<input
+								type="checkbox"
+								id="cultural"
+								value=""
+								name="travelSites"
+								className="hidden peer"
+								onChange={e => {
+									handleTravelSites(e)
+								}}
+							/>
+							<label
+								htmlFor="cultural"
+								className="inline-flex items-center justify-between w-full p-4 text-primary bg-white border-2 border-gray-200 rounded-lg cursor-pointer dark:hover:text-gray-300 dark:border-gray-700 peer-checked:border-blue-600 dark:peer-checked:text-blue-500 peer-checked:text-blue-500 hover:bg-gray-50  dark:bg-gray-800 dark:hover:bg-gray-700 hover:text-blue-500 "
+							>
+								<div className="block">
+									<div className="w-full text-lg font-semibold">
+										Cultural Tourism
+									</div>
 								</div>
-								<div className="w-full text-sm">
-									A TypeScript-based web application
-									framework.
+							</label>
+						</li>
+						<li className="">
+							<input
+								type="checkbox"
+								id="historical"
+								value=""
+								name="travelSites"
+								onChange={e => {
+									handleTravelSites(e)
+								}}
+								className="hidden peer"
+							/>
+							<label
+								htmlFor="historical"
+								className="inline-flex items-center justify-between w-full p-4 text-primary bg-white border-2 border-gray-200 rounded-lg cursor-pointer dark:hover:text-gray-300 dark:border-gray-700 peer-checked:border-blue-600 dark:peer-checked:text-blue-500 peer-checked:text-blue-500 hover:bg-gray-50  dark:bg-gray-800 dark:hover:bg-gray-700 hover:text-blue-500"
+							>
+								<div className="block">
+									<div className="w-full text-lg font-semibold">
+										Historical Tourism
+									</div>
 								</div>
-							</div>
-						</label>
-					</li>
-				</ul> */}
+							</label>
+						</li>
+
+						<li className="">
+							<input
+								type="checkbox"
+								id="mountain"
+								value=""
+								className="hidden peer"
+								name="travelSites"
+								onChange={e => {
+									handleTravelSites(e)
+								}}
+							/>
+							<label
+								htmlFor="mountain"
+								className="inline-flex items-center justify-between w-full p-4 text-primary bg-white border-2 border-gray-200 rounded-lg cursor-pointer dark:hover:text-gray-300 dark:border-gray-700 peer-checked:border-blue-600 dark:peer-checked:text-blue-500 peer-checked:text-blue-500 hover:bg-gray-50  dark:bg-gray-800 dark:hover:bg-gray-700 hover:text-blue-500"
+							>
+								<div className="block">
+									<div className="w-full text-lg font-semibold">
+										Mountain Tourism
+									</div>
+								</div>
+							</label>
+						</li>
+						<li className="">
+							<input
+								type="checkbox"
+								id="ecotourism"
+								value=""
+								className="hidden peer"
+								name="travelSites"
+								onChange={e => {
+									handleTravelSites(e)
+								}}
+							/>
+							<label
+								htmlFor="ecotourism"
+								className="inline-flex items-center justify-between w-full p-4 text-primary bg-white border-2 border-gray-200 rounded-lg cursor-pointer dark:hover:text-gray-300 dark:border-gray-700 peer-checked:border-blue-600 dark:peer-checked:text-blue-500 peer-checked:text-blue-500 hover:bg-gray-50  dark:bg-gray-800 dark:hover:bg-gray-700 hover:text-blue-500"
+							>
+								<div className="block">
+									<div className="w-full text-lg font-semibold">
+										EcoTourism
+									</div>
+								</div>
+							</label>
+						</li>
+						<li className="">
+							<input
+								type="checkbox"
+								id="religious"
+								value=""
+								className="hidden peer"
+								name="travelSites"
+								onChange={e => {
+									handleTravelSites(e)
+								}}
+							/>
+							<label
+								htmlFor="religious"
+								className="inline-flex items-center justify-between w-full p-4 text-primary bg-white border-2 border-gray-200 rounded-lg cursor-pointer dark:hover:text-gray-300 dark:border-gray-700 peer-checked:border-blue-600 dark:peer-checked:text-blue-500 peer-checked:text-blue-500 hover:bg-gray-50  dark:bg-gray-800 dark:hover:bg-gray-700 hover:text-blue-500"
+							>
+								<div className="block">
+									<div className="w-full text-lg font-semibold">
+										Religious Tourism
+									</div>
+								</div>
+							</label>
+						</li>
+						<li className="">
+							<input
+								type="checkbox"
+								id="wildlife"
+								value=""
+								className="hidden peer"
+								name="travelSites"
+								onChange={e => {
+									handleTravelSites(e)
+								}}
+							/>
+							<label
+								htmlFor="wildlife"
+								className="inline-flex items-center justify-between w-full p-4 text-primary bg-white border-2 border-gray-200 rounded-lg cursor-pointer dark:hover:text-gray-300 dark:border-gray-700 peer-checked:border-blue-600 dark:peer-checked:text-blue-500 peer-checked:text-blue-500 hover:bg-gray-50  dark:bg-gray-800 dark:hover:bg-gray-700 hover:text-blue-500"
+							>
+								<div className="block">
+									<div className="w-full text-lg font-semibold">
+										Wildlife Tourism
+									</div>
+								</div>
+							</label>
+						</li>
+						<li className="">
+							<input
+								type="checkbox"
+								id="desert"
+								value=""
+								className="hidden peer"
+								name="travelSites"
+								onChange={e => {
+									handleTravelSites(e)
+								}}
+							/>
+							<label
+								htmlFor="desert"
+								className="inline-flex items-center justify-between w-full p-4 text-primary bg-white border-2 border-gray-200 rounded-lg cursor-pointer dark:hover:text-gray-300 dark:border-gray-700 peer-checked:border-blue-600 dark:peer-checked:text-blue-500 peer-checked:text-blue-500 hover:bg-gray-50  dark:bg-gray-800 dark:hover:bg-gray-700 hover:text-blue-500"
+							>
+								<div className="block">
+									<div className="w-full text-lg font-semibold">
+										Desert Tourism
+									</div>
+								</div>
+							</label>
+						</li>
+					</ul>
+				</div>
 			</div>
 		</main>
 	)
