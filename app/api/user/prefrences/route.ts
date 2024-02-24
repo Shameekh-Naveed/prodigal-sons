@@ -1,24 +1,22 @@
 import { NextRequest, NextResponse } from "next/server"
 import { ObjectId } from "mongoose"
 import { UserRole, UserStatus } from "@/app/enums/user.enum"
-import db from "@/utils/db"
 import { getToken } from "next-auth/jwt"
 import { checkRoles } from "@/app/utils/auth"
 import { TourModel } from "@/app/database/schemas/tour.schema"
 import { JwtInterface } from "@/app/interfaces/jwt.interface"
+import { TripSort } from "@/app/enums/filterParams.enum"
 import { TourStatus } from "@/app/enums/tour.enum"
+import db from "@/utils/db"
+import { UserModel } from "@/app/database/schemas/user.schema"
 
 const createRoles = [[UserStatus.APPROVED, UserRole.USER]]
 
-// * Get all requested tours
-export async function GET(request: NextRequest, { params }: any) {
+export async function POST(request: NextRequest) {
 	try {
+		const req = await request.json()
+		// Connect to the database
 		await db.connect()
-
-		const { searchParams } = new URL(request.url)
-		const pageParam = +(searchParams.get("page") || 0)
-		const limitParam = +(searchParams.get("limit") || 0)
-		const [limit, skip] = paginationParser(pageParam, limitParam)
 
 		// Get the JWT token from the request
 		// TODO: Deal with the jwt type
@@ -38,28 +36,27 @@ export async function GET(request: NextRequest, { params }: any) {
 				{ status: 401 }
 			)
 		}
+		const userID = authToken.user._id
+		const { preferences } = req
 
-		const organizerID = authToken.user._id
-
-		// get all tours
-		const tours = await TourModel.find({ organizerID })
+		const update = UserModel.findByIdAndUpdate(userID, { preferences })
 
 		// Return success response
 		return NextResponse.json(
 			{
 				success: true,
-				message: "Tours fetched succesfully",
+				message: "Tour initalized successfully",
 				data: {
-					tours
+					message: "Success"
 				}
 			},
-			{ status: 200 }
+			{ status: 201 }
 		)
 	} catch (error: any) {
 		return NextResponse.json(
 			{
 				success: false,
-				message: "An error occurred while fetching the tours",
+				message: "An error occurred while performing this action",
 				error: error?.message || "Internal Server Error"
 			},
 			{ status: 500 }

@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server"
 import { ObjectId } from "mongoose"
 import { UserRole, UserStatus } from "@/app/enums/user.enum"
-import db from "@/app/utils/db"
+import db from "@/utils/db"
 import { getToken } from "next-auth/jwt"
 import { checkRoles } from "@/app/utils/auth"
 import { TourModel } from "@/app/database/schemas/tour.schema"
@@ -39,7 +39,7 @@ export async function GET(request: NextRequest, { params }: any) {
 		const userID = authToken.user._id.toString()
 
 		// get all tours
-		const tour = await TourModel.findById(tourID)
+		const tour = await TourModel.findById(tourID).populate("organizerID")
 
 		if (
 			authToken.roles.includes(UserRole.PARTNER) &&

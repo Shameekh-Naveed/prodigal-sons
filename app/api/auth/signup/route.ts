@@ -1,4 +1,4 @@
-import UserModel from "@/db/schemas/user.schema"
+import { UserModel } from "@/app/database/schemas/user.schema"
 import db from "@/utils/db"
 import { hashPassword } from "@/utils/hash"
 import { NextRequest, NextResponse } from "next/server"
@@ -55,6 +55,6 @@ export async function POST(request: NextRequest) {
 			{ status: 500 }
 		)
 	} finally {
-		await db.disconnect()
+		// await db.disconnect()
 	}
 }

@@ -20,13 +20,20 @@ const userSchema = new Schema(
 			required: true,
 			default: UserRole.USER
 		},
-		profilePicture: { type: String }
+		profilePicture: { type: String },
+		preferences: [
+			{
+				type: String,
+				default: []
+			}
+		]
 	},
 	{ timestamps: true }
 )
 
 type User = InferSchemaType<typeof userSchema>
-// const User = models.User || model("User", schema)
-const UserModel = model("User", userSchema)
+const UserModel = models.User || model("User", userSchema)
+// const UserModel = model("User", userSchema)
 
 export { UserModel }
+export type { User }

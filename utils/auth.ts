@@ -1,8 +1,8 @@
 import { NextAuthOptions } from "next-auth"
 import CredentialsProvider from "next-auth/providers/credentials"
 import { isPasswordValid } from "./hash"
-import UserModel from "@/db/schemas/user.schema"
 import db from "./db"
+import { User, UserModel } from "@/app/database/schemas/user.schema"
 
 export const authOptions: NextAuthOptions = {
 	secret: process.env.JWT_SECRET,
@@ -30,9 +30,11 @@ export const authOptions: NextAuthOptions = {
 				if (!credentials?.email || !credentials?.password) {
 					return null
 				}
-				const user = await UserModel.findOne({
-					email: credentials?.email
-				})
+				const user = (await UserModel.findOne({
+					email: credentials.email
+				})) as User
+
+				if (!user) return null
 
 				const isPasswordMatch = await isPasswordValid(
 					credentials.password,
@@ -42,8 +44,10 @@ export const authOptions: NextAuthOptions = {
 				if (!isPasswordMatch || !user) {
 					return null
 				}
-
-				return user
+				let preferenceFlag = false
+				if (user.preferences.length > 0) preferenceFlag = true
+				const roles = [user.role, user.status]
+				return { user, roles, preferenceFlag }
 			}
 		})
 	]

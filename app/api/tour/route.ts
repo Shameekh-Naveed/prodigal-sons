@@ -1,13 +1,13 @@
 import { NextRequest, NextResponse } from "next/server"
 import { ObjectId } from "mongoose"
 import { UserRole, UserStatus } from "@/app/enums/user.enum"
-import db from "@/app/utils/db"
 import { getToken } from "next-auth/jwt"
 import { checkRoles } from "@/app/utils/auth"
 import { TourModel } from "@/app/database/schemas/tour.schema"
 import { JwtInterface } from "@/app/interfaces/jwt.interface"
 import { TripSort } from "@/app/enums/filterParams.enum"
 import { TourStatus } from "@/app/enums/tour.enum"
+import db from "@/utils/db"
 
 const createRoles = [
 	[UserStatus.APPROVED, UserRole.PARTNER],
@@ -114,6 +114,7 @@ export async function GET(request: NextRequest, { params }: any) {
 
 		// get all tours
 		const tours = await TourModel.find(filters)
+			.populate("organizerID")
 			.sort(sort)
 			.skip(skip)
 			.limit(limit)
@@ -150,7 +151,9 @@ const getTripFilters = (searchParams: URLSearchParams) => {
 	const searchQuery = searchParams.get("query") || ""
 	const words = searchQuery.split(/\s+/).filter(word => word !== "")
 	const regexPattern = words.map(word => new RegExp(word, "i"))
-	const filters: any = {}
+	const filters: any = {
+		status: TourStatus.APPROVED
+	}
 	const sort: any = {}
 	if (words.length > 0) {
 		filters.name = regexPattern
