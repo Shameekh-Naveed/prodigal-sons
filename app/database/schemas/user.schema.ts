@@ -1,7 +1,7 @@
 import { UserRole, UserStatus } from "@/app/enums/user.enum"
 import { Schema, InferSchemaType, model, models } from "mongoose"
 
-const schema = new Schema(
+const userSchema = new Schema(
 	{
 		firstName: { type: String, required: true },
 		lastName: { type: String, required: true },
@@ -25,8 +25,8 @@ const schema = new Schema(
 	{ timestamps: true }
 )
 
-type User = InferSchemaType<typeof schema>
+type User = InferSchemaType<typeof userSchema>
 // const User = models.User || model("User", schema)
-const User = model("User", schema)
+const User = model("User", userSchema)
 
 export { User }
