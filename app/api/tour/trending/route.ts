@@ -35,7 +35,6 @@ export async function GET(request: NextRequest, { params }: any) {
 				$limit: 10
 			}
 		])
-		console.log("nback", { tours })
 		// Return success response
 		return NextResponse.json(
 			{
