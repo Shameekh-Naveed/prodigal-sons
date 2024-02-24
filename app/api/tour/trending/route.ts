@@ -13,12 +13,30 @@ import db from "@/utils/db"
 export async function GET(request: NextRequest, { params }: any) {
 	try {
 		await db.connect()
-
+		console.log("hre")
 		// get all tours
-		// TODO: COmplete this
-		const tours = await TourModel.find().populate("organizerID")
-		// const tours = await TourModel.aggregate([])
-
+		const tours = await TourModel.aggregate([
+			{
+				$lookup: {
+					from: "registerations",
+					localField: "_id",
+					foreignField: "tourID",
+					as: "registerations"
+				}
+			},
+			{
+				$addFields: {
+					registerationCount: { $size: "$registerations" }
+				}
+			},
+			{
+				$sort: { registerationCount: -1 }
+			},
+			{
+				$limit: 10
+			}
+		])
+		console.log("nback", { tours })
 		// Return success response
 		return NextResponse.json(
 			{
@@ -43,40 +61,4 @@ export async function GET(request: NextRequest, { params }: any) {
 		// Disconnect from the database
 		await db.disconnect()
 	}
-}
-
-const getTripFilters = (searchParams: URLSearchParams) => {
-	const orderBy =
-		(searchParams.get("sort") as TripSort) || TripSort.CREATED_DEC
-	const searchQuery = searchParams.get("query") || ""
-	const words = searchQuery.split(/\s+/).filter(word => word !== "")
-	const regexPattern = words.map(word => new RegExp(word, "i"))
-	const filters: any = {
-		status: TourStatus.APPROVED
-	}
-	const sort: any = {}
-	if (words.length > 0) {
-		filters.name = regexPattern
-		filters.description = regexPattern
-	}
-
-	switch (orderBy) {
-		case TripSort.CREATED_DEC:
-			sort.createdAt = "desc"
-			break
-		case TripSort.DEPARTURE_ASC:
-			sort.departure = "asc"
-			break
-		case TripSort.DEPARTURE_DEC:
-			sort.departure = "desc"
-			break
-		case TripSort.PRICE_ASC:
-			sort.price = "asc"
-			break
-		case TripSort.PRICE_DEC:
-			sort.price = "desc"
-			break
-	}
-
-	return { sort, filters }
 }
