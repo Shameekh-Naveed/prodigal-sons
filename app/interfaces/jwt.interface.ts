@@ -11,4 +11,5 @@ export interface JwtInterface {
 	}
 	// roles: (UserRole | UserStatus)[]
 	roles: string[]
+	preferenceFlag: boolean
 }

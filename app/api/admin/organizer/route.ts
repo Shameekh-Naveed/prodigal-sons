@@ -19,13 +19,13 @@ export async function GET(request: NextRequest) {
 
 		// Get the JWT token from the request
 		// TODO: Deal with the jwt type
-		const authToken = (await getToken({
+		const JwtToken = await getToken({
 			req: request,
 			secret: process.env.JWT_SECRET
-		})) as unknown as JwtInterface
+		})
 
 		// Check if user is authenticated and has the desired role
-		if (!authToken || !checkRoles(createRoles, authToken)) {
+		if (!JwtToken || !checkRoles(createRoles, JwtToken)) {
 			return NextResponse.json(
 				{
 					success: false,
