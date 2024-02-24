@@ -46,11 +46,24 @@ const profileFormSchema = z.object({
 	email: z.string({
 		required_error: "Please select an email to display."
 	}),
-	phoneNumber: z
+	phoneNumber: z.string({
+		required_error: "Please enter your phone number."
+	}),
+	oldPassword: z
 		.string({
-			required_error: "Please enter your phone number."
+			required_error: "Please enter your old password."
 		})
-		.email()
+		.min(8, {
+			message: "Password must be at least 8 characters."
+		}),
+	newPassword: z
+		.string({
+			required_error: "Please enter your new password."
+		})
+		.min(8, {
+			message: "Password must be at least 8 characters."
+		}),
+	profilePicture: z.string().email()
 	// bio: z.string().max(160).min(4),
 	// urls: z
 	// 	.array(

@@ -11,6 +11,7 @@ import { Button } from "./ui/button"
 import { getSession, signOut } from "next-auth/react"
 import { useAtom } from "jotai"
 import { LoggedInAtom } from "@/utils/atoms"
+import Image from "next/image"
 
 export default function Header({
 	header,
@@ -100,15 +101,14 @@ export default function Header({
 							// 	Logout
 							// </Button>
 							<>
-								<img
+								<Image
 									id="avatarButton"
-									type="button"
 									data-dropdown-toggle="userDropdown"
 									data-dropdown-placement="bottom-start"
-									class="w-10 h-10 rounded-full cursor-pointer"
+									className="w-10 h-10 rounded-full cursor-pointer"
 									src="/docs/images/people/profile-picture-5.jpg"
 									alt="User dropdown"
-								></img>
+								></Image>
 								<div
 									id="userDropdown"
 									className="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700 dark:divide-gray-600"

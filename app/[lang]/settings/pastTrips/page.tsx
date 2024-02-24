@@ -13,7 +13,7 @@ export default function SettingsAppearancePage() {
 					</p>
 				</div>
 				<Separator />
-				<Trip />
+				<Trip Title="Hello" departure="12" arrival="11" price="100" />
 			</div>
 		</div>
 	)
