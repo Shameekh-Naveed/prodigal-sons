@@ -25,6 +25,8 @@ export async function POST(request: NextRequest) {
 			secret: process.env.JWT_SECRET
 		})) as unknown as JwtInterface
 
+		console.log({ authToken })
+
 		// Check if user is authenticated and has the desired role
 		if (!authToken || !checkRoles(createRoles, authToken)) {
 			return NextResponse.json(
