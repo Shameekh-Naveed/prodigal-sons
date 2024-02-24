@@ -109,8 +109,6 @@ export default function Header({
 										height={40}
 										src="/docs/images/people/profile-picture-5.jpg"
 										alt="User dropdown"
-										width={40}
-										height={40}
 									/>
 								</div>
 
