@@ -20,7 +20,13 @@ const userSchema = new Schema(
 			required: true,
 			default: UserRole.USER
 		},
-		profilePicture: { type: String }
+		profilePicture: { type: String },
+		preferences: [
+			{
+				type: String,
+				default: []
+			}
+		]
 	},
 	{ timestamps: true }
 )

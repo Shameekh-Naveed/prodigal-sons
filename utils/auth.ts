@@ -44,8 +44,10 @@ export const authOptions: NextAuthOptions = {
 				if (!isPasswordMatch || !user) {
 					return null
 				}
+				let preferenceFlag = false
+				if (user.preferences.length > 0) preferenceFlag = true
 				const roles = [user.role, user.status]
-				return { user, roles }
+				return { user, roles, preferenceFlag }
 			}
 		})
 	]
