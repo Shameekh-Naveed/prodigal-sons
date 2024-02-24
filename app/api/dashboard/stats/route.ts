@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server"
-import { ObjectId } from "mongoose"
+import { ObjectId, Types } from "mongoose"
 import { UserRole, UserStatus } from "@/app/enums/user.enum"
 import db from "@/app/utils/db"
 import { getToken } from "next-auth/jwt"
@@ -7,6 +7,7 @@ import { checkRoles } from "@/app/utils/auth"
 import { TourModel } from "@/app/database/schemas/tour.schema"
 import { JwtInterface } from "@/app/interfaces/jwt.interface"
 import { UserModel } from "@/app/database/schemas/user.schema"
+import { RegisterationModel } from "@/app/database/schemas/registeration.schema"
 
 const createRoles = [[UserStatus.APPROVED, UserRole.ADMIN]]
 
@@ -35,37 +36,27 @@ export async function GET(request: NextRequest) {
 				{ status: 401 }
 			)
 		}
+
+		const organizerID = authToken.user._id
 		// const organizers = await UserModel.find({ role: UserRole.PARTNER })
 
 		// TODO: Look into this aggregation pipeline maybe
-		const organizers = await TourModel.aggregate([
+		const organizers = await RegisterationModel.aggregate([
 			{
 				$lookup: {
-					from: "users",
-					localField: "organizerID",
+					from: "tours",
+					localField: "tourID",
 					foreignField: "_id",
-					as: "user"
+					as: "tour"
 				}
 			},
 			{
-				$unwind: "$user"
+				$unwind: "$tour"
 			},
 			{
-				$group: {
-					_id: {
-						fistName: "$firstName"
-					},
-					count: {
-						$sum: 1
-					}
-				}
-			},
-			{
-				$project: {
-					// interviewVenue: "$interviewVenue"
-					firstName: "$firstName",
-					lastName: "$lastName",
-					count: 1
+				$match: {
+					// "$tour.organizerID": new Types.ObjectId(organizerID.toString())
+					organizerID: new Types.ObjectId(organizerID.toString())
 				}
 			}
 		])
