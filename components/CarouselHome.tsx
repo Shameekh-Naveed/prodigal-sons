@@ -26,6 +26,7 @@ export default function CarouselHome() {
 							name={tour.title as string}
 							description={tour.description as string}
 							image={tour.image as string}
+							// @ts-ignore
 							link={`/tour/${tour._id as string}`}
 						/>
 					</CarouselItem>

@@ -18,11 +18,11 @@ const itinerarySchema = new Schema({
 
 const tourSchema = new Schema(
 	{
-		_id: Schema.Types.ObjectId,
+		// _id: Schema.Types.ObjectId,
 
 		title: { type: String, required: true },
 		description: { type: String, required: true },
-		image: { type: String, required: true },
+		image: { type: String },
 		departure: { type: Date, required: true },
 		arrival: { type: Date, required: true },
 		organizerID: {
@@ -48,7 +48,7 @@ const tourSchema = new Schema(
 		category: {
 			type: String,
 			enum: TourCategory,
-			required: true
+			default: TourCategory.RELEGIOUS
 		}
 	},
 	{ timestamps: true }

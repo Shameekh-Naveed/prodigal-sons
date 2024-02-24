@@ -4,6 +4,7 @@ import { Button } from "./ui/button"
 import { toast } from "sonner"
 
 type State = {
+	title: string
 	location: string
 	description: string
 	departure: string
@@ -18,6 +19,7 @@ type State = {
 
 export default function CustomForm() {
 	const [values, setValues] = useState<State>({
+		title: "",
 		location: "",
 		description: "",
 		departure: "",
@@ -74,6 +76,16 @@ export default function CustomForm() {
 
 	return (
 		<form className="flex flex-col gap-4 max-w-3xl" onSubmit={handleSubmit}>
+			<label className="text-lg" htmlFor="title">
+				Title
+			</label>
+			<input
+				className="block w-full rounded-md border-0 py-1.5 bg-secondary text-black shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-1 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6 px-2"
+				type="text"
+				value={values.title}
+				onChange={handleChange("title")}
+				placeholder="Title"
+			/>
 			<label className="text-lg" htmlFor="location">
 				Location
 			</label>
