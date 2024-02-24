@@ -17,7 +17,8 @@ const CarouselHome = () => {
 						<Card
 							name={"tour.title as string"}
 							// @ts-ignore
-							link={`/tour/${tour._id as string}`}
+							// link={`/tour/${tour._id as string}`}
+							link={"#"}
 						/>
 					</CarouselItem>
 				))}

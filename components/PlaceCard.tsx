@@ -16,7 +16,7 @@ const Card = ({ name, link }: CardProps) => {
 					"url('https://a.cdn-hotels.com/gdcs/production18/d1838/041ae6b1-0a88-4c22-a648-53a22dd4a006.jpg?impolicy=fcrop&w=800&h=533&q=medium')"
 			}}
 		>
-			<div className="absolute w-full h-full group-hover:blur-sm duration-200 "></div>
+			<div className="absolute w-full h-full group-hover:blur-sm duration-200"></div>
 			<h1 className="hidden group-hover:block duration-200 z-10 text-4xl md:text-5xl lg:text-2xl font-bold text-primary">
 				Hello Jee
 			</h1>
