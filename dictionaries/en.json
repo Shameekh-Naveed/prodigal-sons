@@ -21,5 +21,10 @@
 			"label": "Projects"
 		}
 	],
+	"home": {
+		"banner": {
+			"headline": "Your adventure awaits you"
+		}
+	},
 	"footer": {}
 }
