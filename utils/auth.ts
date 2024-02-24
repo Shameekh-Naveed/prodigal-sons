@@ -35,6 +35,7 @@ export const authOptions: NextAuthOptions = {
 			async authorize(credentials: any, req: any): Promise<any | null> {
 				await db.connect()
 				if (!credentials?.email || !credentials?.password) {
+					console.log("cp1")
 					return null
 				}
 				const user = await UserModel.findOne({
@@ -49,6 +50,8 @@ export const authOptions: NextAuthOptions = {
 				)
 
 				if (!isPasswordMatch || !user) {
+					console.log("cp2")
+
 					return null
 				}
 				let preferenceFlag = false
