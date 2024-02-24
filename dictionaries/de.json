@@ -21,6 +21,11 @@
 			"label": "Projects"
 		}
 	],
+	"home": {
+		"banner": {
+			"headline": "Welcome to my website"
+		}
+	},
 	"footer": {},
 	"trips": {
 		"banner": {

@@ -1,46 +1,58 @@
+// "use client"
 import { Tour } from "@/app/database/schemas/tour.schema"
+import { TourCategory } from "@/app/enums/tour.enum"
 import { Button } from "@/components/ui/button"
 import { Locale } from "@/i18n.config"
 import { getDictionary } from "@/lib/dictionaries"
+// import { useEffect, useState } from "react"
 
 export default async function Page({ params }: { params: { lang: Locale } }) {
 	const { trips } = await getDictionary(params.lang)
-	const tours = [
-		{
-			title: "something",
-			description:
-				"something something something something something something something something something something something ",
-			departure: new Date().toISOString().slice(0, 10),
-			arrival: new Date().toISOString().slice(0, 10),
-			organizerID: "1234567890",
-			// itinerary: [{ type: itinerarySchema, default: [] }],
-			totalAmount: 123456,
-			status: "pending",
-			type: "religious"
-		},
-		{
-			title: "something",
-			description: "something",
-			departure: new Date().toISOString().slice(0, 10),
-			arrival: new Date().toISOString().slice(0, 10),
-			organizerID: "1234567890",
-			// itinerary: [{ type: itinerarySchema, default: [] }],
-			totalAmount: 123456,
-			status: "pending",
-			type: "religious"
-		},
-		{
-			title: "something",
-			description: "something",
-			departure: new Date().toISOString().slice(0, 10),
-			arrival: new Date().toISOString().slice(0, 10),
-			organizerID: "1234567890",
-			// itinerary: [{ type: itinerarySchema, default: [] }],
-			totalAmount: 123456,
-			status: "pending",
-			type: "religious"
-		}
-	]
+	// const [tours, setTours] = useState([])
+	// useEffect(() => {
+	// 	fetchData().then(data => {
+	// 		setTours(tours)
+	// 	})
+	// }, [])
+
+	const releTours = await fetchData(TourCategory.RELEGIOUS)
+	const culTours = await fetchData(TourCategory.CULTURAL)
+	// const tours = [
+	// 	{
+	// 		title: "something",
+	// 		description:
+	// 			"something something something something something something something something something something something ",
+	// 		departure: new Date().toISOString().slice(0, 10),
+	// 		arrival: new Date().toISOString().slice(0, 10),
+	// 		organizerID: "1234567890",
+	// 		// itinerary: [{ type: itinerarySchema, default: [] }],
+	// 		totalAmount: 123456,
+	// 		status: "pending",
+	// 		type: "religious"
+	// 	},
+	// 	{
+	// 		title: "something",
+	// 		description: "something",
+	// 		departure: new Date().toISOString().slice(0, 10),
+	// 		arrival: new Date().toISOString().slice(0, 10),
+	// 		organizerID: "1234567890",
+	// 		// itinerary: [{ type: itinerarySchema, default: [] }],
+	// 		totalAmount: 123456,
+	// 		status: "pending",
+	// 		type: "religious"
+	// 	},
+	// 	{
+	// 		title: "something",
+	// 		description: "something",
+	// 		departure: new Date().toISOString().slice(0, 10),
+	// 		arrival: new Date().toISOString().slice(0, 10),
+	// 		organizerID: "1234567890",
+	// 		// itinerary: [{ type: itinerarySchema, default: [] }],
+	// 		totalAmount: 123456,
+	// 		status: "pending",
+	// 		type: "religious"
+	// 	}
+	// ]
 	return (
 		<main className="min-h-[calc(100vh-192px)] p-10">
 			<div className="container mx-auto flex flex-col items-center gap-8">
@@ -55,19 +67,37 @@ export default async function Page({ params }: { params: { lang: Locale } }) {
 					filter thing here
 				</div>
 				<Trips
-					tours={tours}
+					tours={releTours}
 					trips={trips}
 					tripsKey={"religious-trips"}
 				/>
 				<Trips
-					tours={tours}
+					tours={culTours}
 					trips={trips}
 					tripsKey={"cultural-trips"}
 				/>
-				<Trips tours={tours} trips={trips} tripsKey={"explore"} />
+				<Trips tours={culTours} trips={trips} tripsKey={"explore"} />
 			</div>
 		</main>
 	)
+}
+
+const fetchData = async (category: TourCategory) => {
+	try {
+		const data = await fetch(
+			`${process.env.HOST}api/tour?category=${category}`,
+			{
+				cache: "no-store"
+			}
+		)
+		const parsedRes = await data.json()
+		console.log({ parsedRes })
+		const tours = parsedRes.data.tours
+		return tours
+	} catch (error) {
+		console.log({ error })
+		return []
+	}
 }
 
 const Trips = ({

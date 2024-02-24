@@ -1,6 +1,6 @@
-import { TourStatus, TourTypes } from "@/app/enums/tour.enum"
+import { TourCategory, TourStatus, TourTypes } from "@/app/enums/tour.enum"
 import { UserRole, UserStatus } from "@/app/enums/user.enum"
-import { Schema, InferSchemaType, model } from "mongoose"
+import { Schema, InferSchemaType, model, models } from "mongoose"
 import { types } from "util"
 
 const attractionSchema = new Schema({
@@ -18,8 +18,11 @@ const itinerarySchema = new Schema({
 
 const tourSchema = new Schema(
 	{
+		_id: Schema.Types.ObjectId,
+
 		title: { type: String, required: true },
 		description: { type: String, required: true },
+		image: { type: String, required: true },
 		departure: { type: Date, required: true },
 		arrival: { type: Date, required: true },
 		organizerID: {
@@ -28,7 +31,7 @@ const tourSchema = new Schema(
 			required: true
 		},
 		itinerary: [{ type: itinerarySchema, default: [] }],
-		totalAmount: {
+		price: {
 			type: Number,
 			required: true
 		},
@@ -41,14 +44,19 @@ const tourSchema = new Schema(
 			type: String,
 			enum: TourTypes,
 			required: true
+		},
+		categories: {
+			type: String,
+			enum: TourCategory,
+			required: true
 		}
 	},
 	{ timestamps: true }
 )
 
-const TourModel = model("Tour", tourSchema)
-const ItineraryModel = model("Itinerary", itinerarySchema)
-const AttractionModel = model("Attraction", attractionSchema)
+const TourModel = models.Tour || model("Tour", tourSchema)
+const ItineraryModel = models.Tour || model("Itinerary", itinerarySchema)
+const AttractionModel = models.Tour || model("Attraction", attractionSchema)
 
 type Tour = InferSchemaType<typeof tourSchema>
 type Itinerary = InferSchemaType<typeof itinerarySchema>
