@@ -40,7 +40,7 @@ export default function CarouselHome() {
 const fetchData = async () => {
 	try {
 		const res = await fetch(
-			process.env.HOST || "http://localhost:3000/" + `api/tour/trending`
+			`${process.env.NEXT_PUBLIC_HOST}api/tour/trending`
 		)
 		const parsedRes = await res.json()
 		if (!res.ok) {

@@ -85,7 +85,7 @@ export default async function Page({ params }: { params: { lang: Locale } }) {
 const fetchData = async (category: TourCategory) => {
 	try {
 		const data = await fetch(
-			`${process.env.HOST}api/tour?category=${category}`,
+			`${process.env.NEXT_PUBLIC_HOST}api/tour?category=${category}`,
 			{
 				cache: "no-store"
 			}

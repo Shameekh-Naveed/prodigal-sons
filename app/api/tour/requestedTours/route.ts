@@ -7,6 +7,7 @@ import { checkRoles } from "@/app/utils/auth"
 import { TourModel } from "@/app/database/schemas/tour.schema"
 import { JwtInterface } from "@/app/interfaces/jwt.interface"
 import { TourStatus } from "@/app/enums/tour.enum"
+import { paginationParser } from "@/utils/query-parser"
 
 const createRoles = [[UserStatus.APPROVED, UserRole.USER]]
 
