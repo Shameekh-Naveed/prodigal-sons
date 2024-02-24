@@ -1,4 +1,5 @@
 "use client"
+import { UserRole } from "@/app/enums/user.enum"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { useEffect, useState } from "react"
@@ -10,17 +11,19 @@ type State = {
 	lastName: string
 	email: string
 	password: string
+	role: UserRole
 	confirmPassword: string
 	phoneNumber: string
 }
 
-const Signup: React.FC = () => {
+function Signup({ role }: { role: UserRole }) {
 	const OAuthGoogleURL = process.env.NEXT_PUBLIC_OAUTH_GOOGLE_URL ?? "#"
 	const router = useRouter()
 	const [values, setValues] = useState<State>({
 		firstName: "",
 		lastName: "",
 		email: "",
+		role: role,
 		password: "",
 		confirmPassword: "",
 		phoneNumber: ""

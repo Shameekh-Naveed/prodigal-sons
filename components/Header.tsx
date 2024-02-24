@@ -12,6 +12,7 @@ import { getSession, signOut } from "next-auth/react"
 import { useAtom } from "jotai"
 import { LoggedInAtom } from "@/utils/atoms"
 import Image from "next/image"
+import { Session } from "next-auth"
 
 export default function Header({
 	header,
@@ -40,7 +41,8 @@ export default function Header({
 	}, [])
 
 	useEffect(() => {
-		getSession().then(session => {
+		getSession().then((session: Session | null) => {
+			console.log(session, "session")
 			if (session) {
 				setLoggedIn(true)
 			}
@@ -115,7 +117,7 @@ export default function Header({
 								<div
 									id="userDropdown"
 									ref={menuRef}
-									className="absolute right-0 z-10 mt-2 py-2 w-48 bg-white rounded-lg shadow-xl dark:bg-gray-700 dark:divide-gray-600"
+									className="absolute right-0 hidden z-10 mt-2 py-2 w-48 bg-white rounded-lg shadow-xl dark:bg-gray-700 dark:divide-gray-600"
 								>
 									<ul
 										className="py-2 text-sm text-gray-700 dark:text-gray-200"
@@ -123,36 +125,20 @@ export default function Header({
 									>
 										<li>
 											<Link
-												href="#"
-												className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-											>
-												Dashboard
-											</Link>
-										</li>
-										<li>
-											<Link
-												href="#"
+												href="/settings"
 												className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
 											>
 												Settings
 											</Link>
 										</li>
-										<li>
-											<Link
-												href="#"
-												className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-											>
-												Earnings
-											</Link>
-										</li>
 									</ul>
 									<div className="py-1">
-										<Link
-											href="#"
-											className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
+										<button
+											onClick={() => signOut()}
+											className="block px-4 py-2 w-full text-start text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
 										>
 											Sign out
-										</Link>
+										</button>
 									</div>
 								</div>
 							</div>
