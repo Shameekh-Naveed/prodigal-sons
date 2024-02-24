@@ -1,6 +1,6 @@
 "use client"
 import Link from "next/link"
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import { FcIcons8Cup } from "react-icons/fc"
 import { useTheme } from "next-themes"
 import { Moon, Sun } from "lucide-react"
@@ -26,7 +26,15 @@ export default function Header({
 	const { resolvedTheme, setTheme } = useTheme()
 	const [loggedIn, setLoggedIn] = useAtom(LoggedInAtom)
 	const [mounted, setMounted] = useState(false)
+	const menuRef = useRef<HTMLDivElement>(null)
 	const links = [...header]
+	const toggleMenu = () => {
+		const menu = menuRef.current
+		if (menu) {
+			menu?.classList?.toggle("hidden")
+		}
+	}
+
 	useEffect(() => {
 		setMounted(true)
 	}, [])
@@ -92,33 +100,23 @@ export default function Header({
 					</button>
 					{mounted &&
 						(loggedIn ? (
-							// <Button
-							// 	onClick={async () => {
-							// 		await signOut()
-							// 		setLoggedIn(false)
-							// 	}}
-							// >
-							// 	Logout
-							// </Button>
-							<>
-								<Image
-									id="avatarButton"
-									data-dropdown-toggle="userDropdown"
-									data-dropdown-placement="bottom-start"
-									className="w-10 h-10 rounded-full cursor-pointer"
-									src="/docs/images/people/profile-picture-5.jpg"
-									alt="User dropdown"
-								></Image>
+							<div className="relative">
+								<div onClick={() => toggleMenu()}>
+									<Image
+										id="avatarButton"
+										className="w-10 h-10 rounded-full cursor-pointer"
+										width={40}
+										height={40}
+										src="/docs/images/people/profile-picture-5.jpg"
+										alt="User dropdown"
+									></Image>
+								</div>
+
 								<div
 									id="userDropdown"
-									className="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700 dark:divide-gray-600"
+									ref={menuRef}
+									className="absolute right-0 z-10 mt-2 py-2 w-48 bg-white rounded-lg shadow-xl dark:bg-gray-700 dark:divide-gray-600"
 								>
-									<div className="px-4 py-3 text-sm text-gray-900 dark:text-white">
-										<div>Bonnie Green</div>
-										<div className="font-medium truncate">
-											name@flowbite.com
-										</div>
-									</div>
 									<ul
 										className="py-2 text-sm text-gray-700 dark:text-gray-200"
 										aria-labelledby="avatarButton"
@@ -157,7 +155,7 @@ export default function Header({
 										</Link>
 									</div>
 								</div>
-							</>
+							</div>
 						) : (
 							<>
 								<Link href="/signin" passHref>
