@@ -26,5 +26,35 @@
 			"headline": "Welcome to my website"
 		}
 	},
-	"footer": {}
+	"footer": {},
+	"trips": {
+		"banner": {
+			"headline": "headline",
+			"subHeadline": "subHeadline"
+		},
+		"religious-trips": {
+			"title": "Religious Trips",
+			"departure": "Departure",
+			"arrival": "Arrival",
+			"price": "Price",
+			"details": "Details"
+		},
+		"cultural-trips": {
+			"title": "Cultural Trips",
+			"departure": "Departure",
+			"arrival": "Arrival",
+			"price": "Price",
+			"details": "Details"
+		},
+		"explore": {
+			"title": "Explore",
+			"departure": "Departure",
+			"arrival": "Arrival",
+			"price": "Price",
+			"details": "Details"
+		}
+	},
+	"tripSlug": {
+		"yourTrip": "Your Trip"
+	}
 }

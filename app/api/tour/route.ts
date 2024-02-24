@@ -7,7 +7,9 @@ import { TourModel } from "@/app/database/schemas/tour.schema"
 import { JwtInterface } from "@/app/interfaces/jwt.interface"
 import { TripSort } from "@/app/enums/filterParams.enum"
 import { TourStatus } from "@/app/enums/tour.enum"
+// import {paginationParser} from "@/utils/query-parser"
 import db from "@/utils/db"
+import { paginationParser } from "@/utils/query-parser"
 
 const createRoles = [
 	[UserStatus.APPROVED, UserRole.PARTNER],
@@ -52,7 +54,8 @@ export async function POST(request: NextRequest) {
 			arrival,
 			itinerary,
 			totalAmount,
-			type
+			type,
+			category
 		} = req
 
 		// Create a new tour
@@ -64,6 +67,7 @@ export async function POST(request: NextRequest) {
 			itinerary,
 			totalAmount,
 			type,
+			category,
 			organizerID: authToken.user._id,
 			status: isPartner ? TourStatus.APPROVED : TourStatus.REQUESTED
 		})
@@ -149,6 +153,7 @@ const getTripFilters = (searchParams: URLSearchParams) => {
 	const orderBy =
 		(searchParams.get("sort") as TripSort) || TripSort.CREATED_DEC
 	const searchQuery = searchParams.get("query") || ""
+	const category = searchParams.get("category") || ""
 	const words = searchQuery.split(/\s+/).filter(word => word !== "")
 	const regexPattern = words.map(word => new RegExp(word, "i"))
 	const filters: any = {
@@ -159,6 +164,8 @@ const getTripFilters = (searchParams: URLSearchParams) => {
 		filters.name = regexPattern
 		filters.description = regexPattern
 	}
+
+	if (category) sort.category = category
 
 	switch (orderBy) {
 		case TripSort.CREATED_DEC:

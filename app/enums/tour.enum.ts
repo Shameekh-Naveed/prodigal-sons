@@ -10,3 +10,8 @@ export enum TourTypes {
 	DAY_TRIP = "day-trip",
 	MULTI_DAY = "multi-day"
 }
+
+export enum TourCategory {
+	RELEGIOUS = "relegious",
+	CULTURAL = "cultural"
+}
