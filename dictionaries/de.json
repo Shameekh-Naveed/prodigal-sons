@@ -1,0 +1,25 @@
+{
+	"header": [
+		{
+			"href": "/home",
+			"label": "Home"
+		},
+		{
+			"href": "/about",
+			"label": "About"
+		},
+		{
+			"href": "/contact",
+			"label": "Contact"
+		},
+		{
+			"href": "/blog",
+			"label": "Blog"
+		},
+		{
+			"href": "/projects",
+			"label": "Projects"
+		}
+	],
+	"footer": {}
+}
