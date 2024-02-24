@@ -32,6 +32,7 @@ const registerationSchema = new Schema(
 )
 
 type Registeration = InferSchemaType<typeof registerationSchema>
-const RegisterationModel = model("Registeration", registerationSchema)
+const RegisterationModel =
+	models.Registeration || model("Registeration", registerationSchema)
 
 export { RegisterationModel }

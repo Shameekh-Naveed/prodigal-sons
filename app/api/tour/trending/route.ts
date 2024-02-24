@@ -58,6 +58,6 @@ export async function GET(request: NextRequest, { params }: any) {
 		)
 	} finally {
 		// Disconnect from the database
-		await db.disconnect()
+		// await db.disconnect()
 	}
 }

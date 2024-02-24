@@ -117,6 +117,6 @@ export async function GET(request: NextRequest) {
 		)
 	} finally {
 		// Disconnect from the database
-		await db.disconnect()
+		// await db.disconnect()
 	}
 }

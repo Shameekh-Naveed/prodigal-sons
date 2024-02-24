@@ -20,7 +20,6 @@ export async function GET(request: NextRequest) {
 		await db.connect()
 
 		// Get the JWT token from the request
-		// TODO: Deal with the jwt type
 		const JwtToken = await getToken({
 			req: request,
 			secret: process.env.JWT_SECRET
@@ -88,6 +87,6 @@ export async function GET(request: NextRequest) {
 		)
 	} finally {
 		// Disconnect from the database
-		await db.disconnect()
+		// await db.disconnect()
 	}
 }
