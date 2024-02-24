@@ -59,40 +59,11 @@ export async function GET(request: NextRequest) {
 					// "$tour.organizerID": new Types.ObjectId(organizerID.toString())
 					organizerID: new Types.ObjectId(organizerID.toString())
 				}
-			}
-		])
-
-		const month = new Date().getMonth()
-		let revenueMonth = 0,
-			revenuePrev = 0,
-			registerationsMonth = 0,
-			registerationsPrev = 0
-
-		const registerations_month = []
-		const registerations_prev = []
-		registerations.forEach(registeration => {
-			const registerationMonth = registeration.createdAt.toString()
-			if (registerationMonth === month) {
-				registerationsMonth++
-				if (registeration.paymentStatus === PaymentStatus.APPROVED)
-					revenueMonth += registeration.bill
-			} else if (registerationMonth === month - 1) {
-				registerationsPrev++
-				if (registeration.paymentStatus === PaymentStatus.APPROVED)
-					revenuePrev += registeration.bill
-			}
-		})
-
-		const stats = {
-			registerations: {
-				curr: registerationsMonth,
-				prev: registerationsPrev
 			},
-			revenue: {
-				curr: revenueMonth,
-				prev: revenuePrev
-			}
-		}
+			{ $sort: { createdAt: -1 } },
+			{ $skip: 0 },
+			{ $limit: 5 }
+		])
 
 		// Return success response
 		return NextResponse.json(
@@ -100,7 +71,7 @@ export async function GET(request: NextRequest) {
 				success: true,
 				message: "stats fetched",
 				data: {
-					stats
+					registerations
 				}
 			},
 			{ status: 200 }

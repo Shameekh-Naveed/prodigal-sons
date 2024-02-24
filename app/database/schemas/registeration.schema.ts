@@ -19,6 +19,10 @@ const registerationSchema = new Schema(
 			enum: PaymentStatus,
 			default: PaymentStatus.PENDING
 		},
+		bill: {
+			type: Number,
+			required: true
+		},
 		bookingCount: {
 			type: Number,
 			default: 1
