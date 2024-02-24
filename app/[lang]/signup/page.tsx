@@ -1,3 +1,4 @@
+import { UserRole } from "@/app/enums/user.enum"
 import Signup from "@/components/Signup"
 import { authOptions } from "@/utils/auth"
 import { getServerSession } from "next-auth/next"
@@ -11,7 +12,7 @@ export default async function Page() {
 
 	return (
 		<main className="min-h-[calc(100vh-192px)]">
-			<Signup />
+			<Signup role={UserRole.USER} />
 		</main>
 	)
 }
