@@ -91,14 +91,73 @@ export default function Header({
 					</button>
 					{mounted &&
 						(loggedIn ? (
-							<Button
-								onClick={async () => {
-									await signOut()
-									setLoggedIn(false)
-								}}
-							>
-								Logout
-							</Button>
+							// <Button
+							// 	onClick={async () => {
+							// 		await signOut()
+							// 		setLoggedIn(false)
+							// 	}}
+							// >
+							// 	Logout
+							// </Button>
+							<>
+								<img
+									id="avatarButton"
+									type="button"
+									data-dropdown-toggle="userDropdown"
+									data-dropdown-placement="bottom-start"
+									class="w-10 h-10 rounded-full cursor-pointer"
+									src="/docs/images/people/profile-picture-5.jpg"
+									alt="User dropdown"
+								></img>
+								<div
+									id="userDropdown"
+									className="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700 dark:divide-gray-600"
+								>
+									<div className="px-4 py-3 text-sm text-gray-900 dark:text-white">
+										<div>Bonnie Green</div>
+										<div className="font-medium truncate">
+											name@flowbite.com
+										</div>
+									</div>
+									<ul
+										className="py-2 text-sm text-gray-700 dark:text-gray-200"
+										aria-labelledby="avatarButton"
+									>
+										<li>
+											<Link
+												href="#"
+												className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+											>
+												Dashboard
+											</Link>
+										</li>
+										<li>
+											<Link
+												href="#"
+												className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+											>
+												Settings
+											</Link>
+										</li>
+										<li>
+											<Link
+												href="#"
+												className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+											>
+												Earnings
+											</Link>
+										</li>
+									</ul>
+									<div className="py-1">
+										<Link
+											href="#"
+											className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
+										>
+											Sign out
+										</Link>
+									</div>
+								</div>
+							</>
 						) : (
 							<>
 								<Link href="/signin" passHref>
