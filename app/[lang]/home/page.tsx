@@ -36,7 +36,7 @@ const Home = async ({ params }: { params: { lang: Locale } }) => {
 						<h1 className=" sm:text-4xl 2xl:text-5xl max-2xl:text-center font-bold text-primary w-2/3 my-16">
 							Plan your trip now.
 						</h1>
-						<h1 className=" sm:text-2xl 2xl:text-2xl max-2xl:text-center font-bold text-primary w-2/3 mb-8">
+						<h1 className="sm:text-2xl 2xl:text-2xl max-2xl:text-center font-bold text-primary w-2/3 mb-8">
 							Get a personalized itinerary just for you, guided by
 							traveler tips and reviews.
 						</h1>
@@ -92,15 +92,15 @@ const Home = async ({ params }: { params: { lang: Locale } }) => {
 					<div className="absolute w-full h-full bg-black opacity-10"></div>
 
 					<div className="flex flex-col justify-center w-2/3 z-20">
-						<h1 className="text-3xl md:text-4xl lg:text-4xl font-bold text-primary w-2/3 mb-8 pl-8">
+						<h1 className="text-2xl md:text-4xl lg:text-4xl font-bold text-primary w-2/3 mb-8 pl-8">
 							Plan your trip now.
 						</h1>
-						<h1 className="text-lg md:text-xl lg:text-xl font-bold text-primary w-2/3 pl-8">
+						<h1 className="text-sm md:text-xl lg:text-xl font-bold text-primary w-2/3 pl-8">
 							Get a personalized itinerary just for you, guided by
 							traveler tips and reviews.
 						</h1>
 					</div>
-					<div className="flex justify-end items-end w-1/3 z-20 pr-8">
+					<div className="flex justify-end items-end w-1/3 z-20 md:pr-8">
 						<Button className="bg-secondary text-primary hover:text-secondary px-4 py-2 w-30 font-bold mb-6 rounded-full">
 							Explore now
 						</Button>
