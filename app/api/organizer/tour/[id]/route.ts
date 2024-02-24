@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server"
 import { ObjectId } from "mongoose"
 import { UserRole, UserStatus } from "@/app/enums/user.enum"
-import db from "@/app/utils/db"
+import db from "@/utils/db"
 import { getToken } from "next-auth/jwt"
 import { checkRoles } from "@/app/utils/auth"
 import { TourModel } from "@/app/database/schemas/tour.schema"
@@ -20,13 +20,13 @@ export async function GET(request: NextRequest, { params }: any) {
 
 		// Get the JWT token from the request
 		// TODO: Deal with the jwt type
-		const authToken = (await getToken({
+		const JwTToken = await getToken({
 			req: request,
 			secret: process.env.JWT_SECRET
-		})) as unknown as JwtInterface
+		})
 
 		// Check if user is authenticated and has the desired role
-		if (!authToken || !checkRoles(roles, authToken))
+		if (!JwTToken || !checkRoles(roles, JwTToken))
 			return NextResponse.json(
 				{
 					success: false,
@@ -35,11 +35,11 @@ export async function GET(request: NextRequest, { params }: any) {
 				},
 				{ status: 401 }
 			)
-
+		const authToken = JwTToken.accessToken as JwtInterface
 		const userID = authToken.user._id.toString()
 
 		// get all tours
-		const tour = await TourModel.findById(tourID)
+		const tour = await TourModel.findById(tourID).populate("organizerID")
 
 		if (
 			authToken.roles.includes(UserRole.PARTNER) &&

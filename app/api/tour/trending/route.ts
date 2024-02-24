@@ -1,28 +1,49 @@
 import { NextRequest, NextResponse } from "next/server"
 import { ObjectId } from "mongoose"
 import { UserRole, UserStatus } from "@/app/enums/user.enum"
-import db from "@/utils/db"
 import { getToken } from "next-auth/jwt"
 import { checkRoles } from "@/app/utils/auth"
 import { TourModel } from "@/app/database/schemas/tour.schema"
 import { JwtInterface } from "@/app/interfaces/jwt.interface"
+import { TripSort } from "@/app/enums/filterParams.enum"
+import { TourStatus } from "@/app/enums/tour.enum"
+import db from "@/utils/db"
 
-// * Get a single tour
+// * Get trending tours
 export async function GET(request: NextRequest, { params }: any) {
 	try {
-		const tourID = params.id as ObjectId
 		await db.connect()
-
+		console.log("hre")
 		// get all tours
-		const tour = await TourModel.findById(tourID)
-
+		const tours = await TourModel.aggregate([
+			{
+				$lookup: {
+					from: "registerations",
+					localField: "_id",
+					foreignField: "tourID",
+					as: "registerations"
+				}
+			},
+			{
+				$addFields: {
+					registerationCount: { $size: "$registerations" }
+				}
+			},
+			{
+				$sort: { registerationCount: -1 }
+			},
+			{
+				$limit: 10
+			}
+		])
+		console.log("nback", { tours })
 		// Return success response
 		return NextResponse.json(
 			{
 				success: true,
-				message: "Tour fetched succesfully",
+				message: "Tours fetched succesfully",
 				data: {
-					tour
+					tours
 				}
 			},
 			{ status: 200 }
@@ -31,7 +52,7 @@ export async function GET(request: NextRequest, { params }: any) {
 		return NextResponse.json(
 			{
 				success: false,
-				message: "An error occurred while fetching the tour",
+				message: "An error occurred while fetching the tours",
 				error: error?.message || "Internal Server Error"
 			},
 			{ status: 500 }

@@ -4,15 +4,15 @@ const MONGODB_URI = process.env.MONGODB_URI!
 //@ts-ignore
 let cached = global.mongoose
 
-if (!cached) {
-	//@ts-ignore
-	cached = global.mongoose = { conn: null, promise: null }
-}
+// if (!cached) {
+//@ts-ignore
+cached = global.mongoose = { conn: null, promise: null }
+// }
 
 async function connect() {
-	if (cached.conn) {
-		return cached.conn
-	}
+	// if (cached.conn) {
+	// 	return cached.conn
+	// }
 
 	if (!cached.promise) {
 		const opts = {

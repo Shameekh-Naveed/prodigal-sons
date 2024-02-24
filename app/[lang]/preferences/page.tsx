@@ -1,7 +1,12 @@
 "use client"
+import { Button } from "@/components/ui/button"
+import { useRouter } from "next/navigation"
 import { useState, useEffect } from "react"
+import { toast } from "sonner"
 
 const Preferences = () => {
+	const router = useRouter()
+
 	const [travelStyle, setTravelStyle] = useState([] as string[])
 	const [travelSites, setTravelSites] = useState([] as string[])
 
@@ -15,13 +20,36 @@ const Preferences = () => {
 		console.log(travelSites)
 	}
 
-	useEffect(() => {
-		console.log(travelStyle)
-	}, [travelStyle])
+	const savePreferences = async (e: any) => {
+		e.preventDefault()
+		const data = [...travelStyle, ...travelSites]
+		console.log({ data })
+		try {
+			const res = await fetch("/api/user/preferences", {
+				method: "POST",
+				body: JSON.stringify(data)
+			})
 
-	useEffect(() => {
-		console.log(travelSites)
-	}, [travelSites])
+			const parsedRes = await res.json()
+			if (!res.ok) {
+				toast.error(parsedRes.message)
+				toast.error(parsedRes.error)
+			} else {
+				toast.success(parsedRes.message)
+				router.push("/")
+			}
+		} catch (error) {
+			toast.error("Internal server error. Please try again later")
+		}
+	}
+
+	// useEffect(() => {
+	// 	console.log(travelStyle)
+	// }, [travelStyle])
+
+	// useEffect(() => {
+	// 	console.log(travelSites)
+	// }, [travelSites])
 
 	return (
 		<main className="flex min-h-[calc(100vh-192px)] justify-end bg-secondary flex-col 2xl:flex-row">
@@ -252,6 +280,14 @@ const Preferences = () => {
 							</label>
 						</li>
 					</ul>
+				</div>
+				<div className="w-full flex justify-center items-center my-10">
+					<Button
+						className="bg-secondary text-primary hover:text-blue-500"
+						onClick={savePreferences}
+					>
+						Continue
+					</Button>
 				</div>
 			</div>
 		</main>
