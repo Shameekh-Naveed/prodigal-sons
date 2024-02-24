@@ -13,8 +13,7 @@ const itinerarySchema = new Schema({
 	title: { type: String, required: true },
 	description: { type: String },
 	day: { type: Number, required: true },
-	nightStay: { type: String },
-	attraction: [{ type: attractionSchema, default: [] }]
+	nightStay: { type: String }
 })
 
 const tourSchema = new Schema(

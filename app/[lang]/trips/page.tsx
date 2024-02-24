@@ -56,9 +56,12 @@ export default async function Page({ params }: { params: { lang: Locale } }) {
 	return (
 		<main className="min-h-[calc(100vh-192px)] p-10">
 			<div className="container mx-auto flex flex-col items-center gap-8">
-				<div className="w-full bg-blue-950 dark:bg-blue-200 h-56 rounded-lg dark:text-black text-white flex flex-col p-4 gap-2">
+				<div className="w-full bg-blue-950 dark:bg-blue-200 rounded-lg dark:text-black text-white flex flex-col p-4 gap-2">
 					<h1 className="text-6xl">{trips.banner.headline}</h1>
 					<h3 className="text-2xl">{trips.banner.subHeadline}</h3>
+					<div className="w-full flex justify-end">
+						<Button>Create A Custom Trip</Button>
+					</div>
 				</div>
 				<div className="h-56 bg-blue-500 w-full rounded-lg">
 					filter thing here
