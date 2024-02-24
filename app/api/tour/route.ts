@@ -6,7 +6,7 @@ import { checkRoles } from "@/app/utils/auth"
 import { TourModel } from "@/app/database/schemas/tour.schema"
 import { JwtInterface } from "@/app/interfaces/jwt.interface"
 import { TripSort } from "@/app/enums/filterParams.enum"
-import { TourStatus } from "@/app/enums/tour.enum"
+import { TourStatus, TourTypes } from "@/app/enums/tour.enum"
 import db from "@/utils/db"
 import { paginationParser } from "@/utils/query-parser"
 
@@ -24,7 +24,6 @@ export async function POST(request: NextRequest) {
 		await db.connect()
 
 		// Get the JWT token from the request
-		// TODO: Deal with the jwt type
 		const JwtToken = await getToken({
 			req: request,
 			secret: process.env.JWT_SECRET
@@ -53,9 +52,13 @@ export async function POST(request: NextRequest) {
 			arrival,
 			itinerary,
 			totalAmount,
-			type,
-			category
+			category,
+			price
 		} = req
+
+		// Check if the arrival and departure is in the same day
+		const isSameDay =
+			new Date(departure).getDate() === new Date(arrival).getDate()
 
 		// Create a new tour
 		const tour = new TourModel({
@@ -65,8 +68,9 @@ export async function POST(request: NextRequest) {
 			arrival,
 			itinerary,
 			totalAmount,
-			type,
 			category,
+			price: price || 0,
+			type: isSameDay ? TourTypes.DAY_TRIP : TourTypes.MULTI_DAY,
 			organizerID: authToken.user._id,
 			status: isPartner ? TourStatus.APPROVED : TourStatus.REQUESTED
 		})
@@ -88,6 +92,7 @@ export async function POST(request: NextRequest) {
 			{ status: 201 }
 		)
 	} catch (error: any) {
+		console.log({ error })
 		return NextResponse.json(
 			{
 				success: false,
