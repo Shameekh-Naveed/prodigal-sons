@@ -7,6 +7,10 @@ import { Moon, Sun } from "lucide-react"
 import { RxHamburgerMenu } from "react-icons/rx"
 import { Locale } from "@/i18n.config"
 import LangDropDown from "./LangDropDown"
+import { Button } from "./ui/button"
+import { getSession, signOut } from "next-auth/react"
+import { useAtom } from "jotai"
+import { LoggedInAtom } from "@/utils/atoms"
 
 export default function Header({
 	header,
@@ -19,11 +23,20 @@ export default function Header({
 	params: { lang: Locale }
 }) {
 	const { resolvedTheme, setTheme } = useTheme()
+	const [loggedIn, setLoggedIn] = useAtom(LoggedInAtom)
 	const [mounted, setMounted] = useState(false)
 	const links = [...header]
 	useEffect(() => {
 		setMounted(true)
 	}, [])
+
+	useEffect(() => {
+		getSession().then(session => {
+			if (session) {
+				setLoggedIn(true)
+			}
+		})
+	}, [setLoggedIn])
 
 	useEffect(() => {
 		const toggleTheme = () => {
@@ -76,7 +89,23 @@ export default function Header({
 								<Moon className="h-5 w-5 text-slate-800" />
 							))}
 					</button>
-					<button onClick={async () => {}}>Logout</button>
+					{mounted &&
+						(loggedIn ? (
+							<Button
+								onClick={async () => {
+									await signOut()
+									setLoggedIn(false)
+								}}
+							>
+								Logout
+							</Button>
+						) : (
+							<>
+								<Link href="/signin" passHref>
+									<Button>Sign in</Button>
+								</Link>
+							</>
+						))}
 					<RxHamburgerMenu className="w-6 h-6 self-center justify-center md:hidden block" />
 				</div>
 			</div>

@@ -29,7 +29,7 @@ const tourSchema = new Schema(
 			required: true
 		},
 		itinerary: [{ type: itinerarySchema, default: [] }],
-		totalAmount: {
+		price: {
 			type: Number,
 			required: true
 		},
