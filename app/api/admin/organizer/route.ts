@@ -35,13 +35,46 @@ export async function GET(request: NextRequest) {
 				{ status: 401 }
 			)
 		}
-		const organizers = await UserModel.find({ role: UserRole.PARTNER })
+		// const organizers = await UserModel.find({ role: UserRole.PARTNER })
+
+		// TODO: Look into this aggregation pipeline maybe
+		const organizers = await TourModel.aggregate([
+			{
+				$lookup: {
+					from: "users",
+					localField: "organizerID",
+					foreignField: "_id",
+					as: "user"
+				}
+			},
+			{
+				$unwind: "$user"
+			},
+			{
+				$group: {
+					_id: {
+						fistName: "$firstName"
+					},
+					count: {
+						$sum: 1
+					}
+				}
+			},
+			{
+				$project: {
+					// interviewVenue: "$interviewVenue"
+					firstName: "$firstName",
+					lastName: "$lastName",
+					count: 1
+				}
+			}
+		])
 
 		// Return success response
 		return NextResponse.json(
 			{
 				success: true,
-				message: "Tour initalized successfully",
+				message: "Organizers fetched",
 				data: {
 					organizers
 				}
@@ -52,7 +85,7 @@ export async function GET(request: NextRequest) {
 		return NextResponse.json(
 			{
 				success: false,
-				message: "An error occurred while creating the tour",
+				message: "An error occurred while fetching the organizers",
 				error: error?.message || "Internal Server Error"
 			},
 			{ status: 500 }
