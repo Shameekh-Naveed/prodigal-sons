@@ -45,7 +45,7 @@ const tourSchema = new Schema(
 			enum: TourTypes,
 			required: true
 		},
-		categories: {
+		category: {
 			type: String,
 			enum: TourCategory,
 			required: true
