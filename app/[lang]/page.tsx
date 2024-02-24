@@ -7,6 +7,8 @@ import { Locale } from "@/i18n.config"
 import { getDictionary } from "@/lib/dictionaries"
 import { Button } from "@/components/ui/button"
 import Places from "@/components/Places"
+import { getServerSession } from "next-auth"
+import { authOptions } from "@/utils/auth"
 
 const Home = async ({ params }: { params: { lang: Locale } }) => {
 	const { home } = await getDictionary(params.lang)
@@ -33,8 +35,8 @@ const Home = async ({ params }: { params: { lang: Locale } }) => {
 							Plan your trip now.
 						</h1>
 						<h1 className="sm:text-2xl 2xl:text-2xl max-2xl:text-center font-bold text-primary w-2/3 mb-8">
-							Get a personalized itinerary just for you, guided by
-							traveler tips and reviews.
+							Get a personalized itinerary just for you, guided by traveler
+							tips and reviews.
 						</h1>
 					</div>
 					<div className="w-full 2xl:w-1/2 flex items-center mb-16 justify-center">
@@ -92,8 +94,8 @@ const Home = async ({ params }: { params: { lang: Locale } }) => {
 							Plan your trip now.
 						</h1>
 						<h1 className="text-sm md:text-xl lg:text-xl font-bold text-primary w-2/3 pl-8">
-							Get a personalized itinerary just for you, guided by
-							traveler tips and reviews.
+							Get a personalized itinerary just for you, guided by traveler
+							tips and reviews.
 						</h1>
 					</div>
 					<div className="flex justify-end items-end w-1/3 z-20 md:pr-8">
@@ -116,8 +118,7 @@ const Home = async ({ params }: { params: { lang: Locale } }) => {
 						Check out our religious packages
 					</h1>
 					<h1 className="text-lg md:text-xl lg:text-xl font-bold text-white mb-4 z-10 pl-8">
-						We have a wide range of religious packages to suit all
-						tastes.
+						We have a wide range of religious packages to suit all tastes.
 					</h1>
 					<div className="w-30 z-10 pl-8">
 						<Button className="bg-secondary text-primary hover:text-secondary px-4 py-2 w-30 font-bold mb-6 rounded-full ">
