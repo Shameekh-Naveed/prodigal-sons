@@ -33,7 +33,8 @@ export async function POST(request: NextRequest) {
 			lastName,
 			email,
 			password: hashedPassword,
-			phoneNumber
+			phoneNumber,
+			role
 		})
 		await user.save()
 		return NextResponse.json({
@@ -55,6 +56,6 @@ export async function POST(request: NextRequest) {
 			{ status: 500 }
 		)
 	} finally {
-		// await db.disconnect()
+		// // await db.disconnect()
 	}
 }

@@ -18,37 +18,39 @@ import {
 import { Input } from "@/components/ui/input"
 import { toast } from "sonner"
 import { Separator } from "@/components/ui/separator"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 
 const profileFormSchema = z.object({
-	// username: z
-	// 	.string()
-	// 	.min(2, {
-	// 		message: "Username must be at least 2 characters."
-	// 	})
-	// 	.max(30, {
-	// 		message: "Username must not be longer than 30 characters."
-	// 	}),
 	firstName: z
 		.string({
 			required_error: "Please enter your first name."
 		})
 		.max(30, {
 			message: "First name must not be longer than 30 characters."
-		}),
+		})
+		.optional(),
 	lastName: z
 		.string({
 			required_error: "Please enter your last name."
 		})
 		.max(30, {
 			message: "Last name must not be longer than 30 characters."
-		}),
-	email: z.string({
-		required_error: "Please select an email to display."
-	}),
-	phoneNumber: z.string({
-		required_error: "Please enter your phone number."
-	}),
+		})
+		.optional(),
+	email: z
+		.string({
+			required_error: "Please select an email to display."
+		})
+		.optional(),
+	phoneNumber: z
+		.string({
+			required_error: "Please enter your phone number."
+		})
+		.optional()
+	// profilePicture: z.string().email()
+})
+
+const passwordFormSchema = z.object({
 	oldPassword: z
 		.string({
 			required_error: "Please enter your old password."
@@ -63,18 +65,17 @@ const profileFormSchema = z.object({
 		.min(8, {
 			message: "Password must be at least 8 characters."
 		}),
-	profilePicture: z.string().email()
-	// bio: z.string().max(160).min(4),
-	// urls: z
-	// 	.array(
-	// 		z.object({
-	// 			value: z.string().url({ message: "Please enter a valid URL." })
-	// 		})
-	// 	)
-	// 	.optional()
+	confirmNewPassword: z
+		.string({
+			required_error: "Please enter your new password."
+		})
+		.min(8, {
+			message: "Password must be at least 8 characters."
+		})
 })
 
 type ProfileFormValues = z.infer<typeof profileFormSchema>
+type PasswordFormValues = z.infer<typeof passwordFormSchema>
 
 // This can come from your database or API.
 // const defaultValues: Partial<ProfileFormValues> = {
@@ -92,16 +93,55 @@ export function ProfileForm() {
 		mode: "onChange"
 	})
 
-	// const { fields, append } = useFieldArray({
-	// 	name: "urls",
-	// 	control: form.control
-	// })
+	const passwordForm = useForm<PasswordFormValues>({
+		resolver: zodResolver(passwordFormSchema),
+		mode: "onChange"
+	})
 
-	function onSubmit(data: ProfileFormValues) {
-		console.log(data)
-		toast("Profile has been updated", {
-			description: "Sunday, December 03, 2023 at 9:00 AM"
-		})
+	useEffect(() => {
+		fetchUserInfo()
+	}, [])
+
+	const fetchUserInfo = async () => {
+		try {
+			const res = await fetch("/api/user")
+			const data = await res.json()
+			console.log({ data })
+			if (!res.ok) {
+				toast.error(data.error)
+			} else {
+				const userData = data.data.user
+				form.reset(userData)
+			}
+		} catch (err) {
+			console.error({ err })
+			toast.error("An error occurred while fetching user info")
+		}
+	}
+
+	function submitProfile(data: ProfileFormValues) {
+		console.log({ data })
+	}
+
+	function submitPassword(data: PasswordFormValues) {
+		console.log("subPass", { data })
+	}
+
+	const [editModes, setEditModes] = useState({
+		email: false,
+		firstName: false,
+		lastName: false,
+		phoneNumber: false,
+		oldPassword: true,
+		newPassword: true,
+		confirmNewPassword: true
+	})
+
+	const handleDoubleClick = (fieldName: string) => {
+		setEditModes(prevModes => ({
+			...prevModes,
+			[fieldName]: true
+		}))
 	}
 
 	const [oldPassword, setOldPassword] = useState("")
@@ -119,10 +159,10 @@ export function ProfileForm() {
 		<>
 			<Form {...form}>
 				<form
-					onSubmit={form.handleSubmit(onSubmit)}
+					onSubmit={form.handleSubmit(submitProfile)}
 					className="space-y-8"
 				>
-					<FormField
+					{/* <FormField
 						control={form.control}
 						name="profilePicture"
 						render={({ field }) => (
@@ -144,111 +184,91 @@ export function ProfileForm() {
 								<FormMessage />
 							</FormItem>
 						)}
-					/>
-					<FormField
-						control={form.control}
+					/> */}
+					<FormFieldCustom
+						form={form}
+						editModes={editModes}
+						handleDoubleClick={handleDoubleClick}
 						name="email"
-						render={({ field }) => (
-							<FormItem>
-								<FormLabel>Email</FormLabel>
-								<FormControl>
-									<Input
-										placeholder=""
-										type="email"
-										{...field}
-									/>
-								</FormControl>
-								<FormDescription>
-									This is your public display email.
-								</FormDescription>
-								<FormMessage />
-							</FormItem>
-						)}
+						description="This is your public email"
 					/>
-					<FormField
-						control={form.control}
+
+					<FormFieldCustom
+						form={form}
+						editModes={editModes}
+						handleDoubleClick={handleDoubleClick}
 						name="firstName"
-						render={({ field }) => (
-							<FormItem>
-								<FormLabel>First Name</FormLabel>
-								<FormControl>
-									<Input placeholder="" {...field} />
-								</FormControl>
-								<FormMessage />
-							</FormItem>
-						)}
+						description="First Name"
 					/>
-					<FormField
-						control={form.control}
+
+					<FormFieldCustom
+						form={form}
+						editModes={editModes}
+						handleDoubleClick={handleDoubleClick}
+						// handleBlur={handleBlur}
 						name="lastName"
-						render={({ field }) => (
-							<FormItem>
-								<FormLabel>Last Name</FormLabel>
-								<FormControl>
-									<Input placeholder="" {...field} />
-								</FormControl>
-								<FormMessage />
-							</FormItem>
-						)}
+						description="Last Name"
 					/>
-					<FormField
-						control={form.control}
+
+					<FormFieldCustom
+						form={form}
+						editModes={editModes}
+						handleDoubleClick={handleDoubleClick}
 						name="phoneNumber"
-						render={({ field }) => (
-							<FormItem>
-								<FormLabel>Phone number</FormLabel>
-								<FormControl>
-									<Input placeholder="" {...field} />
-								</FormControl>
-								<FormMessage />
-							</FormItem>
-						)}
+						description="Phone Number"
 					/>
+
 					<Button type="submit">Update profile</Button>
 				</form>
 			</Form>
 			<Separator />
 			<Form {...form}>
 				<form
-					onSubmit={form.handleSubmit(onSubmit)}
+					onSubmit={passwordForm.handleSubmit(submitPassword)}
 					className="space-y-8"
 				>
-					<FormField
-						control={form.control}
+					{/* <FormField
+						control={passwordForm.control}
 						name="oldPassword"
 						render={({ field }) => (
 							<FormItem>
-								<FormLabel>Old password</FormLabel>
+								<FormLabel>Old Password</FormLabel>
 								<FormControl>
 									<Input
 										placeholder=""
 										type="password"
 										{...field}
-										onChange={handleOldPassword}
 									/>
 								</FormControl>
 								<FormMessage />
 							</FormItem>
 						)}
+					/> */}
+
+					<FormFieldCustom
+						form={passwordForm}
+						editModes={editModes}
+						handleDoubleClick={handleDoubleClick}
+						name="oldPassword"
+						description="Existing Password"
 					/>
-					<FormField
-						control={form.control}
+
+					<FormFieldCustom
+						form={passwordForm}
+						editModes={editModes}
+						handleDoubleClick={handleDoubleClick}
 						name="newPassword"
-						render={({ field }) => (
-							<FormItem>
-								<FormLabel>New password</FormLabel>
-								<FormControl>
-									<Input
-										placeholder=""
-										type="password"
-										{...field}
-										onChange={handleNewPassword}
-									/>
-								</FormControl>
-								<FormMessage />
-							</FormItem>
-						)}
+						description="New Password"
 					/>
+
+					<FormFieldCustom
+						form={passwordForm}
+						editModes={editModes}
+						handleDoubleClick={handleDoubleClick}
+						name="confirmNewPassword"
+						description="Confirm New Password"
+					/>
+
 					<Button
 						className=" bg-red-500 text-primary hover:border hover:border-red-500 hover:bg-secondary hover:text-red-500"
 						type="submit"
@@ -260,3 +280,36 @@ export function ProfileForm() {
 		</>
 	)
 }
+
+const FormFieldCustom = ({
+	form,
+	editModes,
+	handleDoubleClick,
+	// handleBlur,
+	name,
+	description
+}: any) => (
+	<FormField
+		control={form.control}
+		name={name}
+		render={({ field }) => (
+			<FormItem onDoubleClick={() => handleDoubleClick(name)}>
+				<FormLabel>{description}</FormLabel>
+				{editModes[name] ? (
+					<Input
+						placeholder=""
+						type={name}
+						{...field}
+						// onBlur={() => handleBlur(name)}
+					/>
+				) : (
+					<div onDoubleClick={() => handleDoubleClick({ name })}>
+						{field.value}
+					</div>
+				)}
+				{/* <FormDescription>{description}</FormDescription> */}
+				<FormMessage />
+			</FormItem>
+		)}
+	/>
+)
