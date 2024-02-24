@@ -8,7 +8,7 @@ import { authOptions } from "@/utils/auth"
 import { useEffect, useState } from "react"
 import { set } from "mongoose"
 
-export default async function SettingsAppearancePage() {
+export default function SettingsAppearancePage() {
 	// const pastTrips = await fetchPastTrips()
 	const [pastTrips, setPastTrips] = useState([])
 
