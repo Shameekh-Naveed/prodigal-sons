@@ -14,6 +14,13 @@ export const authOptions: NextAuthOptions = {
 	pages: {
 		signIn: "/signin"
 	},
+	callbacks: {
+		async jwt({ token, user }) {
+			console.log("here")
+			if (user) token.accessToken = user
+			return token
+		}
+	},
 	providers: [
 		CredentialsProvider({
 			name: "Credentials",
@@ -30,9 +37,9 @@ export const authOptions: NextAuthOptions = {
 				if (!credentials?.email || !credentials?.password) {
 					return null
 				}
-				const user = (await UserModel.findOne({
+				const user = await UserModel.findOne({
 					email: credentials.email
-				})) as User
+				})
 
 				if (!user) return null
 

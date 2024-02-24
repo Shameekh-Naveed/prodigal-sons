@@ -1,4 +1,4 @@
-import { getToken } from "next-auth/jwt"
+import { JWT, getToken } from "next-auth/jwt"
 import { NextRequest, NextResponse } from "next/server"
 import { JwtInterface } from "../interfaces/jwt.interface"
 
@@ -15,7 +15,8 @@ const authUser = async (req: NextRequest) => {
 	)
 }
 
-const checkRoles = (requiredRoles: string[][], authToken: JwtInterface) => {
+const checkRoles = (requiredRoles: string[][], JwtToken: JWT) => {
+	const authToken = JwtToken.accessToken as JwtInterface
 	const userRoles = authToken.roles
 	if (requiredRoles.length === 0) return true
 	for (const rolesSet of requiredRoles) {
