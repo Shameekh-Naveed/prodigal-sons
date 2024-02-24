@@ -1,4 +1,4 @@
-import { TourStatus, TourTypes } from "@/app/enums/tour.enum"
+import { TourCategory, TourStatus, TourTypes } from "@/app/enums/tour.enum"
 import { UserRole, UserStatus } from "@/app/enums/user.enum"
 import { Schema, InferSchemaType, model, models } from "mongoose"
 import { types } from "util"
@@ -44,6 +44,11 @@ const tourSchema = new Schema(
 		type: {
 			type: String,
 			enum: TourTypes,
+			required: true
+		},
+		categories: {
+			type: String,
+			enum: TourCategory,
 			required: true
 		}
 	},

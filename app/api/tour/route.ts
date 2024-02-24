@@ -52,7 +52,8 @@ export async function POST(request: NextRequest) {
 			arrival,
 			itinerary,
 			totalAmount,
-			type
+			type,
+			category
 		} = req
 
 		// Create a new tour
@@ -64,6 +65,7 @@ export async function POST(request: NextRequest) {
 			itinerary,
 			totalAmount,
 			type,
+			category,
 			organizerID: authToken.user._id,
 			status: isPartner ? TourStatus.APPROVED : TourStatus.REQUESTED
 		})
@@ -149,6 +151,7 @@ const getTripFilters = (searchParams: URLSearchParams) => {
 	const orderBy =
 		(searchParams.get("sort") as TripSort) || TripSort.CREATED_DEC
 	const searchQuery = searchParams.get("query") || ""
+	const category = searchParams.get("category") || ""
 	const words = searchQuery.split(/\s+/).filter(word => word !== "")
 	const regexPattern = words.map(word => new RegExp(word, "i"))
 	const filters: any = {
@@ -159,6 +162,8 @@ const getTripFilters = (searchParams: URLSearchParams) => {
 		filters.name = regexPattern
 		filters.description = regexPattern
 	}
+
+	if (category) sort.category = category
 
 	switch (orderBy) {
 		case TripSort.CREATED_DEC:

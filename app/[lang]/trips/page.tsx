@@ -1,5 +1,6 @@
 // "use client"
 import { Tour } from "@/app/database/schemas/tour.schema"
+import { TourCategory } from "@/app/enums/tour.enum"
 import { Button } from "@/components/ui/button"
 import { Locale } from "@/i18n.config"
 import { getDictionary } from "@/lib/dictionaries"
@@ -14,8 +15,8 @@ export default async function Page({ params }: { params: { lang: Locale } }) {
 	// 	})
 	// }, [])
 
-	const tours = await fetchData()
-
+	const releTours = await fetchData(TourCategory.RELEGIOUS)
+	const culTours = await fetchData(TourCategory.CULTURAL)
 	// const tours = [
 	// 	{
 	// 		title: "something",
@@ -63,26 +64,29 @@ export default async function Page({ params }: { params: { lang: Locale } }) {
 					filter thing here
 				</div>
 				<Trips
-					tours={tours}
+					tours={releTours}
 					trips={trips}
 					tripsKey={"religious-trips"}
 				/>
 				<Trips
-					tours={tours}
+					tours={culTours}
 					trips={trips}
 					tripsKey={"cultural-trips"}
 				/>
-				<Trips tours={tours} trips={trips} tripsKey={"explore"} />
+				<Trips tours={culTours} trips={trips} tripsKey={"explore"} />
 			</div>
 		</main>
 	)
 }
 
-const fetchData = async () => {
+const fetchData = async (category: TourCategory) => {
 	try {
-		const data = await fetch(process.env.HOST + "/api/tour", {
-			cache: "no-store"
-		})
+		const data = await fetch(
+			`${process.env.HOST}api/tour?category=${category}`,
+			{
+				cache: "no-store"
+			}
+		)
 		const parsedRes = await data.json()
 		console.log({ parsedRes })
 		const tours = parsedRes.data.tours
