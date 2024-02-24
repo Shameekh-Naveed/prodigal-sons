@@ -61,7 +61,7 @@ export default function Header() {
 	}, [resolvedTheme, setTheme])
 
 	return (
-		<header className="h-24 bg-secondary flex ">
+		<header className="h-24 bg-secondary flex">
 			<div className="container flex justify-between items-center mx-auto">
 				<div>
 					<FcIcons8Cup className="text-4xl" />
