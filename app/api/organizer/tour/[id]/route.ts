@@ -20,13 +20,13 @@ export async function GET(request: NextRequest, { params }: any) {
 
 		// Get the JWT token from the request
 		// TODO: Deal with the jwt type
-		const authToken = (await getToken({
+		const JwTToken = await getToken({
 			req: request,
 			secret: process.env.JWT_SECRET
-		})) as unknown as JwtInterface
+		})
 
 		// Check if user is authenticated and has the desired role
-		if (!authToken || !checkRoles(roles, authToken))
+		if (!JwTToken || !checkRoles(roles, JwTToken))
 			return NextResponse.json(
 				{
 					success: false,
@@ -35,7 +35,7 @@ export async function GET(request: NextRequest, { params }: any) {
 				},
 				{ status: 401 }
 			)
-
+		const authToken = JwTToken.accessToken as JwtInterface
 		const userID = authToken.user._id.toString()
 
 		// get all tours
