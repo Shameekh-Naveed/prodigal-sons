@@ -2,7 +2,8 @@ export enum TourStatus {
 	APPROVED = "approved",
 	PENDING = "pending",
 	BLOCKED = "blocked",
-	DEPARTED = "departed"
+	DEPARTED = "departed",
+	REQUESTED = "requested"
 }
 
 export enum TourTypes {

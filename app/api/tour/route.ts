@@ -6,10 +6,12 @@ import { getToken } from "next-auth/jwt"
 import { checkRoles } from "@/app/utils/auth"
 import { TourModel } from "@/app/database/schemas/tour.schema"
 import { JwtInterface } from "@/app/interfaces/jwt.interface"
+import { TourStatus } from "@/app/enums/tour.enum"
 
 const createRoles = [
 	[UserStatus.APPROVED, UserRole.PARTNER],
-	[UserStatus.APPROVED, UserRole.ADMIN]
+	[UserStatus.APPROVED, UserRole.ADMIN],
+	[UserStatus.APPROVED, UserRole.USER]
 ]
 
 // * Create a new tour
@@ -38,6 +40,10 @@ export async function POST(request: NextRequest) {
 			)
 		}
 
+		const isPartner = authToken.roles.find(
+			role => role === UserRole.PARTNER
+		)
+
 		const {
 			title,
 			description,
@@ -57,7 +63,8 @@ export async function POST(request: NextRequest) {
 			itinerary,
 			totalAmount,
 			type,
-			organizerID: authToken.user._id
+			organizerID: authToken.user._id,
+			status: isPartner ? TourStatus.APPROVED : TourStatus.REQUESTED
 		})
 
 		// Save the order to the database
