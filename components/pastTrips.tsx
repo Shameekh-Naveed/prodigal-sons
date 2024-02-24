@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
+// @ts-ignore
 import ReactStars from "react-rating-stars-component"
 
 import {
@@ -95,4 +96,5 @@ const Trips = ({ Title, departure, arrival, price }: TripsProps) => {
 		</div>
 	)
 }
+
 export default Trips

@@ -109,7 +109,7 @@ export default function Header({
 										height={40}
 										src="/docs/images/people/profile-picture-5.jpg"
 										alt="User dropdown"
-									></Image>
+									/>
 								</div>
 
 								<div

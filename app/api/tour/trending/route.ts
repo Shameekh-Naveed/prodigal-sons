@@ -13,7 +13,6 @@ import db from "@/utils/db"
 export async function GET(request: NextRequest, { params }: any) {
 	try {
 		await db.connect()
-		console.log("hre")
 		// get all tours
 		const tours = await TourModel.aggregate([
 			{
