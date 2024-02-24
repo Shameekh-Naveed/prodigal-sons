@@ -1,5 +1,6 @@
 import { getToken } from "next-auth/jwt"
 import { NextRequest, NextResponse } from "next/server"
+import { JwtInterface } from "../interfaces/jwt.interface"
 
 const authUser = async (req: NextRequest) => {
 	const token = await getToken({ req, secret: process.env.JWT_SECRET })
@@ -14,8 +15,8 @@ const authUser = async (req: NextRequest) => {
 	)
 }
 
-const checkRoles = (requiredRoles: string[][], user: any) => {
-	const userRoles = user?.roles
+const checkRoles = (requiredRoles: string[][], authToken: JwtInterface) => {
+	const userRoles = authToken.roles
 	if (requiredRoles.length === 0) return true
 	for (const rolesSet of requiredRoles) {
 		if (rolesSet.every((role: string) => userRoles?.includes(role)))

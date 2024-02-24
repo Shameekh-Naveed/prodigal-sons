@@ -7,13 +7,13 @@ import { checkRoles } from "@/app/utils/auth"
 import { TourModel } from "@/app/database/schemas/tour.schema"
 import { JwtInterface } from "@/app/interfaces/jwt.interface"
 
-const roles = [
+const createRoles = [
 	[UserStatus.APPROVED, UserRole.PARTNER],
 	[UserStatus.APPROVED, UserRole.ADMIN]
 ]
 
-// * Create a tour
-export async function POST(request: NextRequest, { params }: any) {
+// * Create a new tour
+export async function POST(request: NextRequest) {
 	try {
 		const req = await request.json()
 		// Connect to the database
@@ -27,7 +27,7 @@ export async function POST(request: NextRequest, { params }: any) {
 		})) as unknown as JwtInterface
 
 		// Check if user is authenticated and has the desired role
-		if (!authToken || !checkRoles(roles, authToken)) {
+		if (!authToken || !checkRoles(createRoles, authToken)) {
 			return NextResponse.json(
 				{
 					success: false,
@@ -37,8 +37,6 @@ export async function POST(request: NextRequest, { params }: any) {
 				{ status: 401 }
 			)
 		}
-
-		const reqUser = authToken.user
 
 		const {
 			title,
@@ -59,7 +57,7 @@ export async function POST(request: NextRequest, { params }: any) {
 			itinerary,
 			totalAmount,
 			type,
-			organizerID: reqUser._id
+			organizerID: authToken.user._id
 		})
 
 		// Save the order to the database
@@ -76,13 +74,52 @@ export async function POST(request: NextRequest, { params }: any) {
 					}
 				}
 			},
+			{ status: 201 }
+		)
+	} catch (error: any) {
+		return NextResponse.json(
+			{
+				success: false,
+				message: "An error occurred while creating the tour",
+				error: error?.message || "Internal Server Error"
+			},
+			{ status: 500 }
+		)
+	} finally {
+		// Disconnect from the database
+		await db.disconnect()
+	}
+}
+
+// * Get all tours
+export async function GET(request: NextRequest, { params }: any) {
+	try {
+		await db.connect()
+
+		const { searchParams } = new URL(request.url)
+		const pageParam = +(searchParams.get("page") || 0)
+		const limitParam = +(searchParams.get("limit") || 0)
+		const [limit, skip] = paginationParser(pageParam, limitParam)
+
+		// get all tours
+		const tours = await TourModel.find().skip(skip).limit(limit)
+
+		// Return success response
+		return NextResponse.json(
+			{
+				success: true,
+				message: "Tours fetched succesfully",
+				data: {
+					tours
+				}
+			},
 			{ status: 200 }
 		)
 	} catch (error: any) {
 		return NextResponse.json(
 			{
 				success: false,
-				message: "An error occurred while placing the order",
+				message: "An error occurred while fetching the tours",
 				error: error?.message || "Internal Server Error"
 			},
 			{ status: 500 }

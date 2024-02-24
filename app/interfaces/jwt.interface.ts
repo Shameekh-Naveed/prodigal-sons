@@ -9,5 +9,6 @@ export interface JwtInterface {
 		email: string
 		profilePicture: string
 	}
-	roles: (UserRole | UserStatus)[]
+	// roles: (UserRole | UserStatus)[]
+	roles: string[]
 }
