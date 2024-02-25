@@ -28,7 +28,7 @@ export default function Header({
 	const [loggedIn, setLoggedIn] = useAtom(LoggedInAtom)
 	const [mounted, setMounted] = useState(false)
 	const menuRef = useRef<HTMLDivElement>(null)
-	const setUser = useSetAtom(UserAtom)
+	const [user, setUser] = useAtom(UserAtom)
 
 	const links = [...header]
 	const toggleMenu = () => {
@@ -89,9 +89,7 @@ export default function Header({
 						type="button"
 						className="flex items-center justify-center rounded-lg p-2 transition-colors hover:bg-zinc-300 dark:hover:bg-zinc-700"
 						onClick={() => {
-							setTheme(
-								resolvedTheme === "dark" ? "light" : "dark"
-							)
+							setTheme(resolvedTheme === "dark" ? "light" : "dark")
 						}}
 					>
 						{mounted &&
@@ -110,7 +108,8 @@ export default function Header({
 										className="w-10 h-10 rounded-full cursor-pointer"
 										width={40}
 										height={40}
-										src="/docs/images/people/profile-picture-5.jpg"
+										// @ts-ignore
+										src={user?.profilePicture}
 										alt="User dropdown"
 									/>
 								</div>

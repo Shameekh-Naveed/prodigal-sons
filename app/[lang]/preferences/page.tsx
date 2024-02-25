@@ -3,8 +3,16 @@ import { Button } from "@/components/ui/button"
 import { useRouter } from "next/navigation"
 import { useState, useEffect } from "react"
 import { toast } from "sonner"
+import { authOptions } from "@/utils/auth"
+import { getServerSession } from "next-auth/next"
+import { redirect } from "next/navigation"
 
-const Preferences = () => {
+const Preferences = async () => {
+	const session = await getServerSession(authOptions)
+	if (!session) {
+		redirect("/signin")
+	}
+
 	const router = useRouter()
 
 	const [travelStyle, setTravelStyle] = useState([] as string[])
@@ -281,9 +289,9 @@ const Preferences = () => {
 						</li>
 					</ul>
 				</div>
-				<div className="w-full flex justify-center items-center my-10">
+				<div className="w-full flex justify-end items-center mt-10 mr-20">
 					<Button
-						className="bg-secondary text-primary hover:text-blue-500"
+						className="bg-secondary hover:border hover:border-secondary w-34 h-12 font-semibold text-primary hover:text-blue-500"
 						onClick={savePreferences}
 					>
 						Continue

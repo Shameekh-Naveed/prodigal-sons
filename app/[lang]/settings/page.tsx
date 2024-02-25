@@ -1,7 +1,14 @@
 import { Separator } from "@/components/ui/separator"
 import { ProfileForm } from "@/app/[lang]/settings/profile-form"
+import { authOptions } from "@/utils/auth"
+import { getServerSession } from "next-auth/next"
+import { redirect } from "next/navigation"
 
-export default function SettingsProfilePage() {
+export default async function SettingsProfilePage() {
+	const session = await getServerSession(authOptions)
+	if (!session) {
+		redirect("/signin")
+	}
 	return (
 		<div className="flex w-full">
 			<div className="space-y-6 w-full">

@@ -7,6 +7,7 @@ import { Locale } from "@/i18n.config"
 import { getDictionary } from "@/lib/dictionaries"
 import { Button } from "@/components/ui/button"
 import Places from "@/components/Places"
+import Link from "next/link"
 import { getServerSession } from "next-auth"
 import { authOptions } from "@/utils/auth"
 
@@ -87,7 +88,7 @@ const Home = async ({ params }: { params: { lang: Locale } }) => {
 							"url('https://businessschool.luiss.it/tourism-management/wp-content/uploads/sites/4/2023/06/shutterstock_1774042925-scaled-e1686324435575.jpg')"
 					}}
 				>
-					<div className="absolute w-full h-full bg-black opacity-10"></div>
+					<div className="absolute w-full h-full bg-black opacity-10 rounded-2xl"></div>
 
 					<div className="flex flex-col justify-center w-2/3 z-20">
 						<h1 className="text-2xl md:text-4xl lg:text-4xl font-bold text-primary w-2/3 mb-8 pl-8">
@@ -100,7 +101,7 @@ const Home = async ({ params }: { params: { lang: Locale } }) => {
 					</div>
 					<div className="flex justify-end items-end w-1/3 z-20 md:pr-8">
 						<Button className="bg-secondary text-primary hover:text-secondary px-4 py-2 w-30 font-bold mb-6 rounded-full">
-							Explore now
+							<Link href={"/en/tours/custom"}>Design custom trip</Link>
 						</Button>
 					</div>
 				</div>
@@ -115,14 +116,14 @@ const Home = async ({ params }: { params: { lang: Locale } }) => {
 				>
 					<div className="absolute w-full h-full bg-black opacity-30"></div>
 					<h1 className="text-4xl md:text-4xl lg:text-4xl font-bold text-white mb-4 z-10 pl-8">
-						Check out our religious packages
+						Checkout our Hajj and Umrah packages
 					</h1>
 					<h1 className="text-lg md:text-xl lg:text-xl font-bold text-white mb-4 z-10 pl-8">
 						We have a wide range of religious packages to suit all tastes.
 					</h1>
 					<div className="w-30 z-10 pl-8">
-						<Button className="bg-secondary text-primary hover:text-secondary px-4 py-2 w-30 font-bold mb-6 rounded-full ">
-							Explore now
+						<Button className="bg-secondary text-primary hover:text-secondary px-4 py-2 w-30 font-bold mb-6 rounded-full">
+							<Link href={"/en/quwa"}>Explore Quwa</Link>
 						</Button>
 					</div>
 				</div>

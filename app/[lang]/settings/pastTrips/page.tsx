@@ -6,9 +6,15 @@ import { getSession } from "next-auth/react"
 import { getServerSession } from "next-auth"
 import { authOptions } from "@/utils/auth"
 import { useEffect, useState } from "react"
+import { redirect } from "next/navigation"
 import { set } from "mongoose"
 
-export default function SettingsAppearancePage() {
+export default async function SettingsAppearancePage() {
+	const session = await getServerSession(authOptions)
+	if (!session) {
+		redirect("/signin")
+	}
+
 	// const pastTrips = await fetchPastTrips()
 	const [pastTrips, setPastTrips] = useState([])
 

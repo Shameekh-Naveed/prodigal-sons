@@ -1,3 +1,4 @@
+"use client"
 import { Metadata } from "next"
 import {
 	Card,
@@ -21,6 +22,10 @@ import {
 	SheetTrigger
 } from "@/components/ui/sheet"
 import CustomForm from "./components/CustomForm"
+import { redirect } from "next/navigation"
+import { authOptions } from "@/utils/auth"
+import { getServerSession } from "next-auth/next"
+import { useEffect } from "react"
 
 export const metadata: Metadata = {
 	title: "Dashboard",
@@ -28,6 +33,10 @@ export const metadata: Metadata = {
 }
 
 export default async function DashboardPage() {
+	const session = await getServerSession(authOptions)
+	if (!session) {
+		redirect("/signin")
+	}
 	const data = [
 		{
 			name: "Jan",
@@ -109,8 +118,13 @@ export default async function DashboardPage() {
 			link: "/tours/1"
 		}
 	]
-	// const { registerations, revenue, registerationsArr } = await fetchStats()
-	// const request = await fetchReservations()
+
+	useEffect(() => {
+		console.log("inside")
+		fetchStats().then(data => {
+			console.log({ data })
+		})
+	}, [])
 
 	return (
 		<main className="min-h-[calc(100vh-192px)]">
@@ -266,6 +280,7 @@ const fetchReservations = async () => {
 		return data
 	} catch (error) {
 		console.log({ error })
+		return []
 	}
 }
 
@@ -280,5 +295,18 @@ const fetchStats = async () => {
 		return data
 	} catch (error) {
 		console.log({ error })
+	try {
+		const res = await fetch(`${process.env.NEXT_PUBLIC_HOST}api/dashboard/stats`, {
+			cache: "no-cache"
+		})
+		const parsedRes = await res.json()
+		if (!res.ok) return { a: 1, b: 2, c: 3 }
+		console.log({ parsedRes })
+		const data = parsedRes.data.stats
+		return data
+	} catch (error) {
+		console.log({ error })
+		const a = 1
+		return { a, b: a, c: a }
 	}
 }
