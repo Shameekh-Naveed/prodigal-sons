@@ -16,7 +16,7 @@ const Card = ({ name, link }: CardProps) => {
 			}}
 		>
 			<div className="absolute w-full h-full group-hover:blur-sm duration-200"></div>
-			<h1 className="hidden group-hover:block duration-200 z-10 text-4xl md:text-5xl lg:text-2xl font-bold text-white">
+			<h1 className="  z-10 text-4xl md:text-5xl lg:text-2xl font-bold text-white">
 				{name}
 			</h1>
 		</div>
