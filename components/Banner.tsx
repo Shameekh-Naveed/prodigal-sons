@@ -24,7 +24,7 @@ const Banner: React.FC = () => {
 					the Heart of Islam's Holiest Pilgrimages with Our Guided Tours
 				</p>
 				<Button
-					className="bg-white text-black rounded-full text-lg"
+					className="bg-white text-black hover:text-white rounded-full text-lg"
 					onClick={() => {}}
 				>
 					Get Started
