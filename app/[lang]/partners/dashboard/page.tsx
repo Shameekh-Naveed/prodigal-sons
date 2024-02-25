@@ -1,3 +1,4 @@
+"use client"
 import { Metadata } from "next"
 import {
 	Card,
@@ -15,6 +16,7 @@ import { TourCategory } from "@/app/enums/tour.enum"
 import { redirect } from "next/navigation"
 import { authOptions } from "@/utils/auth"
 import { getServerSession } from "next-auth/next"
+import { useEffect } from "react"
 
 export const metadata: Metadata = {
 	title: "Dashboard",
@@ -107,8 +109,15 @@ export default async function DashboardPage() {
 			link: "/tours/1"
 		}
 	]
-	const { registerations, revenue, registerationsArr } = await fetchStats()
-	const request = await fetchReservations()
+	// const { registerations, revenue, registerationsArr } = await fetchStats()
+	// const request = await fetchReservations()
+
+	useEffect(() => {
+		console.log("inside")
+		fetchStats().then(data => {
+			console.log({ data })
+		})
+	}, [])
 
 	return (
 		<main className="min-h-[calc(100vh-192px)]">
@@ -240,20 +249,36 @@ export default async function DashboardPage() {
 
 // TODO: Test this
 const fetchReservations = async () => {
-	const res = await fetch(`${process.env.NEXT_PUBLIC_HOST}api/dashboard/registerations`)
-	const parsedRes = await res.json()
-	console.log({ parsedRes })
-	const data = parsedRes.data.registerations
-	console.log({ data })
-	return data
+	try {
+		const res = await fetch(
+			`${process.env.NEXT_PUBLIC_HOST}api/dashboard/registerations`
+		)
+		const parsedRes = await res.json()
+		console.log({ parsedRes })
+		const data = parsedRes.data.registerations
+		console.log({ data })
+		return data
+	} catch (error) {
+		console.log({ error })
+		return []
+	}
 }
 
 // TODO: Test this
 const fetchStats = async () => {
-	const res = await fetch(`${process.env.NEXT_PUBLIC_HOST}api/dashboard/stats`)
-	const parsedRes = await res.json()
-	console.log({ parsedRes })
-	const data = parsedRes.data.stats
-	console.log({ data })
-	return data
+	console.log("process.env.NEXT_PUBLIC_HOST", process.env.NEXT_PUBLIC_HOST)
+	try {
+		const res = await fetch(`${process.env.NEXT_PUBLIC_HOST}api/dashboard/stats`, {
+			cache: "no-cache"
+		})
+		const parsedRes = await res.json()
+		if (!res.ok) return { a: 1, b: 2, c: 3 }
+		console.log({ parsedRes })
+		const data = parsedRes.data.stats
+		return data
+	} catch (error) {
+		console.log({ error })
+		const a = 1
+		return { a, b: a, c: a }
+	}
 }
