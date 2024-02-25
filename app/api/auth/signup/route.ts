@@ -6,9 +6,7 @@ import { NextRequest, NextResponse } from "next/server"
 
 export async function POST(request: NextRequest) {
 	const req = await request.json()
-	const { firstName, lastName, email, password, phoneNumber, role, profilePicture } =
-		req
-
+	const { firstName, lastName, email, password, phoneNumber, role } = req
 	try {
 		await db.connect()
 		const userExists = await UserModel.findOne({ email })
