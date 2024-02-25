@@ -115,13 +115,6 @@ export default function DashboardPage() {
 			link: "/tours/1"
 		}
 	]
-<<<<<<< HEAD
-
-	useEffect(() => {}, [])
-	// const { registerations, revenue, registerationsArr } = await fetchStats()
-	// const request = await fetchReservations()
-=======
->>>>>>> ecf55f246336a9718c0e4f1adf355f0246ab98f2
 
 	return (
 		<main className="min-h-[calc(100vh-192px)]">
@@ -292,18 +285,5 @@ const fetchStats = async () => {
 		return data
 	} catch (error) {
 		console.log({ error })
-	try {
-		const res = await fetch(`${process.env.NEXT_PUBLIC_HOST}api/dashboard/stats`, {
-			cache: "no-cache"
-		})
-		const parsedRes = await res.json()
-		if (!res.ok) return { a: 1, b: 2, c: 3 }
-		console.log({ parsedRes })
-		const data = parsedRes.data.stats
-		return data
-	} catch (error) {
-		console.log({ error })
-		const a = 1
-		return { a, b: a, c: a }
 	}
 }
