@@ -4,16 +4,10 @@ import { Button } from "@/components/ui/button"
 import { Locale } from "@/i18n.config"
 import { getDictionary } from "@/lib/dictionaries"
 import Link from "next/link"
-import { redirect } from "next/navigation"
-import { authOptions } from "@/utils/auth"
-import { getServerSession } from "next-auth/next"
+
 // import { useEffect, useState } from "react"
 
 export default async function Page({ params }: { params: { lang: Locale } }) {
-	const session = await getServerSession(authOptions)
-	if (!session) {
-		redirect("/signin")
-	}
 	const { trips } = await getDictionary(params.lang)
 
 	// const [tours, setTours] = useState([])

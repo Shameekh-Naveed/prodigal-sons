@@ -1,7 +1,6 @@
 import React from "react"
 import Carousel from "@/components/CarouselHome"
 import { Command, CommandInput } from "@/components/ui/command"
-import Image from "next/image"
 import Desktop from "@/assets/desktop.png"
 import { Locale } from "@/i18n.config"
 import { getDictionary } from "@/lib/dictionaries"
@@ -10,6 +9,8 @@ import Places from "@/components/Places"
 import Link from "next/link"
 import { getServerSession } from "next-auth"
 import { authOptions } from "@/utils/auth"
+import Image from "next/image"
+import Logo from "@/assets/log.png"
 
 const Home = async ({ params }: { params: { lang: Locale } }) => {
 	const { home } = await getDictionary(params.lang)
@@ -31,7 +32,16 @@ const Home = async ({ params }: { params: { lang: Locale } }) => {
 			</div>
 			<div className="container mx-auto flex justify-center">
 				<div className="w-full bg-gradient-to-br dark:from-[#a674a1] from-[#fad0c4] to-[#ffd1ff] 2xl:h-[35rem] rounded-2xl flex flex-col 2xl:flex-row">
-					<div className=" w-full 2xl:w-1/2 justify-center items-center flex flex-col ">
+					<div className=" w-full 2xl:w-1/2 justify-start items-center flex flex-col ">
+						<Image
+							id="avatarButton"
+							className="cursor-pointer"
+							width={200}
+							height={200}
+							// @ts-ignore
+							src={Logo}
+							alt="User dropdown"
+						/>
 						<h1 className=" sm:text-4xl 2xl:text-5xl max-2xl:text-center font-bold text-primary w-2/3 my-16">
 							Plan your trip now.
 						</h1>

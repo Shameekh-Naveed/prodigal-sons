@@ -19,7 +19,7 @@ export default function YoutubeComponent() {
 				Pilgirms at Ka'aba
 			</h2>
 			<YouTube
-				iframeClassName="aspect-[16/9] 2xl:h-[50rem] xl:h-[30rem] lg:h-[25rem] md:h-[20rem] sm:h-[15rem] h-[12rem]"
+				iframeClassName="aspect-[16/9] 2xl:w-[80rem] 2xl:h-[50rem] xl:w-[60rem] xl:h-[40rem] lg:w-[50rem] lg:h-[30rem] md:h-[30rem] w-[30rem] h-[20rem] "
 				videoId="9QhGZi113xg"
 				opts={opts}
 				onReady={onPlayerReady}
