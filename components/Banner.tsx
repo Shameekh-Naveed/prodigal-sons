@@ -20,9 +20,8 @@ const Banner: React.FC = () => {
 					Experience Hajj and Umrah
 				</h2>
 				<p className="text-xl text-black  flex w-2/3 text-center justify-center leading-9">
-					Discover Spiritual Fulfillment, Discover Yourself, and Find
-					Peace in the Heart of Islam's Holiest Pilgrimages with Our
-					Guided Tours
+					Discover Spiritual Fulfillment, Discover Yourself, and Find Peace in
+					the Heart of Islam's Holiest Pilgrimages with Our Guided Tours
 				</p>
 				<Button
 					className="bg-white text-black rounded-full text-lg"
@@ -31,9 +30,21 @@ const Banner: React.FC = () => {
 					Get Started
 				</Button>
 				<div className="container flex flex-col lg:flex-row gap-10 justify-center mb-12">
-					<StatCard />
-					<StatCard />
-					<StatCard />
+					<StatCard
+						title="40k +"
+						subscript="Pilgrims annually"
+						description="Thousand have entrusted us to fulfill their hajj aspirations"
+					/>
+					<StatCard
+						title="40k +"
+						subscript="Pilgrims annually"
+						description="Thousand have entrusted us to fulfill their hajj aspirations"
+					/>
+					<StatCard
+						title="40k +"
+						subscript="Pilgrims annually"
+						description="Thousand have entrusted us to fulfill their hajj aspirations"
+					/>
 				</div>
 			</div>
 		</div>
