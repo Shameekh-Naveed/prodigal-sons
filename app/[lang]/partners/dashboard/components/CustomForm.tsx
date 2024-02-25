@@ -29,6 +29,8 @@ export default function CustomForm() {
 		price: 0
 	})
 
+	const [image, setImage] = useState(null)
+
 	const addItienary = () => {
 		setValues({
 			...values,
@@ -37,6 +39,10 @@ export default function CustomForm() {
 				{ title: "", description: "", day: 0, nightStay: "" }
 			]
 		})
+	}
+
+	const handleFileUpload = (event: any) => {
+		setImage(event.target.files[0])
 	}
 
 	const handleChangeItinerary =
@@ -58,10 +64,25 @@ export default function CustomForm() {
 
 	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault()
+		const itinerary = values.itinerary.toString()
+		const formData = new FormData()
+		formData.append("title", values.title)
+		formData.append("location", values.location)
+		formData.append("description", values.description)
+		formData.append("departure", values.departure)
+		formData.append("arrival", values.arrival)
+		formData.append("price", `${values.price}`)
+		formData.append("itinerary", itinerary)
+		// @ts-ignore
+		formData.append("image", image)
+
 		try {
 			const res = await fetch("/api/tour", {
 				method: "POST",
-				body: JSON.stringify(values)
+				headers: {
+					"Content-Type": "multipart/form-data"
+				},
+				body: formData
 			})
 			const data = await res.json()
 			if (!res.ok) {
@@ -78,6 +99,9 @@ export default function CustomForm() {
 
 	return (
 		<form className="flex flex-col gap-4 max-w-3xl" onSubmit={handleSubmit}>
+			<input type="file" onChange={handleFileUpload} />
+			<button type="submit">Upload an image for the tour</button>
+
 			<label className="text-lg" htmlFor="title">
 				Title
 			</label>

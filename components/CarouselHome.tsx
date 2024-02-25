@@ -40,7 +40,9 @@ export default function CarouselHome() {
 
 const fetchData = async () => {
 	try {
-		const res = await fetch(`${process.env.NEXT_PUBLIC_HOST}api/tour/trending`)
+		const res = await fetch(`${process.env.NEXT_PUBLIC_HOST}api/tour/trending`, {
+			cache: "no-store"
+		})
 		const parsedRes = await res.json()
 		if (!res.ok) {
 			toast.error(parsedRes.message)

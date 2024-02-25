@@ -1,5 +1,4 @@
 import { NextRequest, NextResponse } from "next/server"
-import { ObjectId } from "mongoose"
 import { UserRole, UserStatus } from "@/app/enums/user.enum"
 import { getToken } from "next-auth/jwt"
 import { checkRoles } from "@/app/utils/auth"
@@ -9,6 +8,13 @@ import { TripSort } from "@/app/enums/filterParams.enum"
 import { TourStatus, TourTypes } from "@/app/enums/tour.enum"
 import db from "@/utils/db"
 import { paginationParser } from "@/utils/query-parser"
+import * as cloudinary from "cloudinary"
+
+cloudinary.v2.config({
+	cloud_name: "",
+	api_key: "",
+	api_secret: ""
+})
 
 const createRoles = [
 	[UserStatus.APPROVED, UserRole.PARTNER],
@@ -41,9 +47,7 @@ export async function POST(request: NextRequest) {
 			)
 		}
 		const authToken = JwtToken.accessToken as JwtInterface
-		const isPartner = authToken.roles.find(
-			role => role === UserRole.PARTNER
-		)
+		const isPartner = authToken.roles.find(role => role === UserRole.PARTNER)
 
 		const {
 			title,
@@ -57,8 +61,7 @@ export async function POST(request: NextRequest) {
 		} = req
 
 		// Check if the arrival and departure is in the same day
-		const isSameDay =
-			new Date(departure).getDate() === new Date(arrival).getDate()
+		const isSameDay = new Date(departure).getDate() === new Date(arrival).getDate()
 
 		// Create a new tour
 		const tour = new TourModel({
@@ -105,6 +108,15 @@ export async function POST(request: NextRequest) {
 		// Disconnect from the database
 		// await db.disconnect()
 	}
+}
+
+const uploadImage = async (file: any) => {
+	const image = await cloudinary.v2.uploader.upload(file, {
+		use_filename: true,
+		public_id: "ccd-logo",
+		folder: "Crash Course D Tests/Maths Enginering Mock 2"
+	})
+	return image.secure_url
 }
 
 // * Get all tours
@@ -154,8 +166,7 @@ export async function GET(request: NextRequest, { params }: any) {
 }
 
 const getTripFilters = (searchParams: URLSearchParams) => {
-	const orderBy =
-		(searchParams.get("sort") as TripSort) || TripSort.CREATED_DEC
+	const orderBy = (searchParams.get("sort") as TripSort) || TripSort.CREATED_DEC
 	const searchQuery = searchParams.get("query") || ""
 	const category = searchParams.get("category") || ""
 	const words = searchQuery.split(/\s+/).filter(word => word !== "")
