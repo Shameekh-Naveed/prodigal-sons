@@ -12,6 +12,15 @@ import { RecentSales } from "./components/recent-sales"
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
 import { TourCategory } from "@/app/enums/tour.enum"
+import {
+	Sheet,
+	SheetContent,
+	SheetDescription,
+	SheetHeader,
+	SheetTitle,
+	SheetTrigger
+} from "@/components/ui/sheet"
+import CustomForm from "./components/CustomForm"
 
 export const metadata: Metadata = {
 	title: "Dashboard",
@@ -100,8 +109,8 @@ export default async function DashboardPage() {
 			link: "/tours/1"
 		}
 	]
-	const { registerations, revenue, registerationsArr } = await fetchStats()
-	const request = await fetchReservations()
+	// const { registerations, revenue, registerationsArr } = await fetchStats()
+	// const request = await fetchReservations()
 
 	return (
 		<main className="min-h-[calc(100vh-192px)]">
@@ -109,6 +118,19 @@ export default async function DashboardPage() {
 				<div className="flex-1 space-y-4 p-8 pt-6">
 					<div className="flex items-center justify-between space-y-2">
 						<h2 className="text-3xl font-bold tracking-tight">Dashboard</h2>
+						<Sheet>
+							<SheetTrigger>
+								<Button>Organize a Tour</Button>
+							</SheetTrigger>
+							<SheetContent className="overflow-auto">
+								<SheetHeader>
+									<SheetTitle>Add details of the Tour</SheetTitle>
+									<SheetDescription>
+										<CustomForm />
+									</SheetDescription>
+								</SheetHeader>
+							</SheetContent>
+						</Sheet>
 					</div>
 					<Tabs defaultValue="overview" className="space-y-4">
 						<TabsContent value="overview" className="space-y-4">
@@ -233,20 +255,30 @@ export default async function DashboardPage() {
 
 // TODO: Test this
 const fetchReservations = async () => {
-	const res = await fetch(`${process.env.NEXT_PUBLIC_HOST}api/dashboard/registerations`)
-	const parsedRes = await res.json()
-	console.log({ parsedRes })
-	const data = parsedRes.data.registerations
-	console.log({ data })
-	return data
+	try {
+		const res = await fetch(
+			`${process.env.NEXT_PUBLIC_HOST}api/dashboard/registerations`
+		)
+		const parsedRes = await res.json()
+		console.log({ parsedRes })
+		const data = parsedRes.data.registerations
+		console.log({ data })
+		return data
+	} catch (error) {
+		console.log({ error })
+	}
 }
 
 // TODO: Test this
 const fetchStats = async () => {
-	const res = await fetch(`${process.env.NEXT_PUBLIC_HOST}api/dashboard/stats`)
-	const parsedRes = await res.json()
-	console.log({ parsedRes })
-	const data = parsedRes.data.stats
-	console.log({ data })
-	return data
+	try {
+		const res = await fetch(`${process.env.NEXT_PUBLIC_HOST}api/dashboard/stats`)
+		const parsedRes = await res.json()
+		console.log({ parsedRes })
+		const data = parsedRes.data.stats
+		console.log({ data })
+		return data
+	} catch (error) {
+		console.log({ error })
+	}
 }
