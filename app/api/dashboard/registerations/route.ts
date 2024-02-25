@@ -18,6 +18,7 @@ export async function GET(request: NextRequest) {
 		const req = await request.json()
 		// Connect to the database
 		await db.connect()
+		console.log("cp01")
 
 		// Get the JWT token from the request
 		const JwtToken = await getToken({
@@ -37,6 +38,7 @@ export async function GET(request: NextRequest) {
 			)
 		}
 		const authToken = JwtToken.accessToken as JwtInterface
+		console.log("cp02")
 
 		const organizerID = authToken.user._id
 		// const organizers = await UserModel.find({ role: UserRole.PARTNER })
@@ -56,13 +58,14 @@ export async function GET(request: NextRequest) {
 			},
 			{
 				$match: {
-					"tour.organizerID": new Types.ObjectId(organizerID.toString())
+					// "$tour.organizerID": new Types.ObjectId(organizerID.toString())
+					organizerID: new Types.ObjectId(organizerID.toString())
 				}
-			},
-			// { $sort: { createdAt: -1 } },
-			{ $skip: 0 },
-			{ $limit: 5 }
+			}
 		])
+
+		console.log({ registerations })
+		console.log("cp03")
 
 		// Return success response
 		return NextResponse.json(
@@ -76,10 +79,11 @@ export async function GET(request: NextRequest) {
 			{ status: 200 }
 		)
 	} catch (error: any) {
+		console.log({ error })
 		return NextResponse.json(
 			{
 				success: false,
-				message: "An error occurred while fetching the organizers",
+				message: "An error occurred while fetching the registerations",
 				error: error?.message || "Internal Server Error"
 			},
 			{ status: 500 }

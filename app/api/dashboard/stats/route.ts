@@ -13,10 +13,12 @@ import { PaymentStatus } from "@/app/enums/payment.enum"
 const createRoles = [[UserStatus.APPROVED, UserRole.ADMIN]]
 
 export async function GET(request: NextRequest) {
+	console.log("hit")
 	try {
 		const req = await request.json()
 		// Connect to the database
 		await db.connect()
+		console.log("cp1")
 
 		// Get the JWT token from the request
 		// TODO: Deal with the jwt type
@@ -36,6 +38,7 @@ export async function GET(request: NextRequest) {
 				{ status: 401 }
 			)
 		}
+		console.log("cp2")
 
 		const authToken = JwtToken.accessToken as JwtInterface
 		const organizerID = authToken.user._id
@@ -61,6 +64,9 @@ export async function GET(request: NextRequest) {
 				}
 			}
 		])
+
+		console.log({ registerations })
+
 		const months = [
 			"Jan",
 			"Feb",
@@ -136,7 +142,7 @@ export async function GET(request: NextRequest) {
 		return NextResponse.json(
 			{
 				success: false,
-				message: "An error occurred while fetching the organizers",
+				message: "An error occurred while fetching the stats",
 				error: error?.message || "Internal Server Error"
 			},
 			{ status: 500 }
