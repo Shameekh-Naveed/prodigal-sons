@@ -13,6 +13,15 @@ import { RecentSales } from "./components/recent-sales"
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
 import { TourCategory } from "@/app/enums/tour.enum"
+import {
+	Sheet,
+	SheetContent,
+	SheetDescription,
+	SheetHeader,
+	SheetTitle,
+	SheetTrigger
+} from "@/components/ui/sheet"
+import CustomForm from "./components/CustomForm"
 import { redirect } from "next/navigation"
 import { authOptions } from "@/utils/auth"
 import { getServerSession } from "next-auth/next"
@@ -109,8 +118,6 @@ export default async function DashboardPage() {
 			link: "/tours/1"
 		}
 	]
-	// const { registerations, revenue, registerationsArr } = await fetchStats()
-	// const request = await fetchReservations()
 
 	useEffect(() => {
 		console.log("inside")
@@ -125,6 +132,19 @@ export default async function DashboardPage() {
 				<div className="flex-1 space-y-4 p-8 pt-6">
 					<div className="flex items-center justify-between space-y-2">
 						<h2 className="text-3xl font-bold tracking-tight">Dashboard</h2>
+						<Sheet>
+							<SheetTrigger>
+								<Button>Organize a Tour</Button>
+							</SheetTrigger>
+							<SheetContent className="overflow-auto">
+								<SheetHeader>
+									<SheetTitle>Add details of the Tour</SheetTitle>
+									<SheetDescription>
+										<CustomForm />
+									</SheetDescription>
+								</SheetHeader>
+							</SheetContent>
+						</Sheet>
 					</div>
 					<Tabs defaultValue="overview" className="space-y-4">
 						<TabsContent value="overview" className="space-y-4">
@@ -266,7 +286,15 @@ const fetchReservations = async () => {
 
 // TODO: Test this
 const fetchStats = async () => {
-	console.log("process.env.NEXT_PUBLIC_HOST", process.env.NEXT_PUBLIC_HOST)
+	try {
+		const res = await fetch(`${process.env.NEXT_PUBLIC_HOST}api/dashboard/stats`)
+		const parsedRes = await res.json()
+		console.log({ parsedRes })
+		const data = parsedRes.data.stats
+		console.log({ data })
+		return data
+	} catch (error) {
+		console.log({ error })
 	try {
 		const res = await fetch(`${process.env.NEXT_PUBLIC_HOST}api/dashboard/stats`, {
 			cache: "no-cache"
