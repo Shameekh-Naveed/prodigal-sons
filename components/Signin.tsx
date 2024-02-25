@@ -7,7 +7,7 @@ import { signIn } from "next-auth/react"
 import { toast } from "sonner"
 import { useRouter } from "next/navigation"
 import { useSetAtom } from "jotai"
-import { LoggedInAtom } from "@/utils/atoms"
+import { LoggedInAtom, UserAtom } from "@/utils/atoms"
 
 type State = {
 	email: string
@@ -20,7 +20,7 @@ export default function Signin() {
 		password: ""
 	})
 	const setLoggedIn = useSetAtom(LoggedInAtom)
-
+	const setUser = useSetAtom(UserAtom)
 	const router = useRouter()
 
 	const handleChange =
@@ -43,6 +43,9 @@ export default function Signin() {
 			} else {
 				toast.success("Signed in successfully")
 				setLoggedIn(true)
+				const user = await fetchUserInfo()
+				localStorage.setItem("user", JSON.stringify(user))
+				setUser(user)
 				setTimeout(() => {
 					router.replace("/")
 				}, 1000)
@@ -52,6 +55,13 @@ export default function Signin() {
 				`An error occurred. Please try again later, error: ${error}`
 			)
 		}
+	}
+
+	const fetchUserInfo = async () => {
+		const res = await fetch("/api/user")
+		const data = await res.json()
+		const user = data.data
+		return user
 	}
 
 	const OAuthGoogleURL = process.env.NEXT_PUBLIC_OAUTH_GOOGLE_URL ?? "#"
