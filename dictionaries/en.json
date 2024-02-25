@@ -1,24 +1,24 @@
 {
 	"header": [
 		{
-			"href": "/home",
+			"href": "/",
 			"label": "Home"
 		},
 		{
-			"href": "/about",
-			"label": "About"
+			"href": "/tours",
+			"label": "Tours"
 		},
 		{
-			"href": "/contact",
-			"label": "Contact"
+			"href": "/tours/custom",
+			"label": "Design Custom Tour"
 		},
 		{
-			"href": "/blog",
-			"label": "Blog"
+			"href": "/quwa",
+			"label": "Quwa"
 		},
 		{
-			"href": "/projects",
-			"label": "Projects"
+			"href": "/settings",
+			"label": "Settings"
 		}
 	],
 	"home": {

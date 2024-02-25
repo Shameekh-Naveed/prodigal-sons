@@ -281,9 +281,9 @@ const Preferences = () => {
 						</li>
 					</ul>
 				</div>
-				<div className="w-full flex justify-center items-center my-10">
+				<div className="w-full flex justify-end items-center mt-10 mr-20">
 					<Button
-						className="bg-secondary text-primary hover:text-blue-500"
+						className="bg-secondary hover:border hover:border-secondary w-34 h-12 font-semibold text-primary hover:text-blue-500"
 						onClick={savePreferences}
 					>
 						Continue
