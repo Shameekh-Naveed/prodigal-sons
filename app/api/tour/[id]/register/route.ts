@@ -1,21 +1,25 @@
 import { NextRequest, NextResponse } from "next/server"
-import { ObjectId, Types } from "mongoose"
+import { ObjectId } from "mongoose"
 import { UserRole, UserStatus } from "@/app/enums/user.enum"
-import db from "@/utils/db"
 import { getToken } from "next-auth/jwt"
 import { checkRoles } from "@/app/utils/auth"
 import { TourModel } from "@/app/database/schemas/tour.schema"
 import { JwtInterface } from "@/app/interfaces/jwt.interface"
-import { UserModel } from "@/app/database/schemas/user.schema"
+import { TripSort } from "@/app/enums/filterParams.enum"
+import { TourStatus, TourTypes } from "@/app/enums/tour.enum"
+import db from "@/utils/db"
+import { paginationParser } from "@/utils/query-parser"
 import { RegisterationModel } from "@/app/database/schemas/registeration.schema"
-import { PaymentStatus } from "@/app/enums/payment.enum"
 
-const createRoles = [[UserStatus.APPROVED, UserRole.ADMIN]]
+const createRoles = [[UserStatus.APPROVED, UserRole.USER]]
 
-// * Get all organizers
-export async function GET(request: NextRequest) {
+// * Create a new reservation
+export async function POST(request: NextRequest, { params }: any) {
 	try {
 		const req = await request.json()
+		const { bill, bookingCount } = req
+		const tourID = params.id as ObjectId
+
 		// Connect to the database
 		await db.connect()
 
@@ -37,49 +41,38 @@ export async function GET(request: NextRequest) {
 			)
 		}
 		const authToken = JwtToken.accessToken as JwtInterface
+		const userID = authToken.user._id
 
-		const organizerID = authToken.user._id
-		// const organizers = await UserModel.find({ role: UserRole.PARTNER })
+		// Create a new tour
+		const registeration = new RegisterationModel({
+			userID,
+			tourID,
+			bill,
+			bookingCount
+		})
 
-		// TODO: Look into this aggregation pipeline maybe
-		const registerations = await RegisterationModel.aggregate([
-			{
-				$lookup: {
-					from: "tours",
-					localField: "tourID",
-					foreignField: "_id",
-					as: "tour"
-				}
-			},
-			{
-				$unwind: "$tour"
-			},
-			{
-				$match: {
-					"tour.organizerID": new Types.ObjectId(organizerID.toString())
-				}
-			},
-			// { $sort: { createdAt: -1 } },
-			{ $skip: 0 },
-			{ $limit: 5 }
-		])
+		// Save the order to the database
+		await registeration.save()
 
 		// Return success response
 		return NextResponse.json(
 			{
 				success: true,
-				message: "stats fetched",
+				message: "registeration initalized successfully",
 				data: {
-					registerations
+					registeration: {
+						_id: registeration._id
+					}
 				}
 			},
-			{ status: 200 }
+			{ status: 201 }
 		)
 	} catch (error: any) {
+		console.log({ error })
 		return NextResponse.json(
 			{
 				success: false,
-				message: "An error occurred while fetching the organizers",
+				message: "An error occurred while creating the registeration",
 				error: error?.message || "Internal Server Error"
 			},
 			{ status: 500 }
