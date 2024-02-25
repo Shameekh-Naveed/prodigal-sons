@@ -18,7 +18,7 @@ const Card = ({ name, description, image, link }: CardProps) => {
 					image ||
 					"https://daisyui.com/images/stock/photo-1606107557195-0e29a4b5b4aa.jpg"
 				}
-				alt="Shoes"
+				alt="Tour Image"
 			/>
 			<div className="flex flex-col gap-4 p-4">
 				<h2 className="font-bold text-xl">{name || "Lahore"}</h2>

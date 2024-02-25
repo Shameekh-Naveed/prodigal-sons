@@ -4,6 +4,8 @@ import { Button } from "@/components/ui/button"
 import { Locale } from "@/i18n.config"
 import { getDictionary } from "@/lib/dictionaries"
 import Link from "next/link"
+import Kaaba from "@/assets/kaaba.png"
+import Image from "next/image"
 
 // import { useEffect, useState } from "react"
 
@@ -21,9 +23,9 @@ export default async function Page({ params }: { params: { lang: Locale } }) {
 	// const culTours = await fetchData(TourCategory.CULTURAL)
 	const releTours = [
 		{
-			title: "something",
+			title: "TOur Name",
 			description:
-				"something something something something something something something something something something something ",
+				"TOur Name TOur Name TOur Name TOur Name TOur Name TOur Name TOur Name TOur Name TOur Name TOur Name TOur Name ",
 			departure: new Date().toISOString().slice(0, 10),
 			arrival: new Date().toISOString().slice(0, 10),
 			organizerID: "1234567890",
@@ -33,8 +35,8 @@ export default async function Page({ params }: { params: { lang: Locale } }) {
 			type: "religious"
 		},
 		{
-			title: "something",
-			description: "something",
+			title: "TOur Name",
+			description: "TOur Name",
 			departure: new Date().toISOString().slice(0, 10),
 			arrival: new Date().toISOString().slice(0, 10),
 			organizerID: "1234567890",
@@ -44,8 +46,8 @@ export default async function Page({ params }: { params: { lang: Locale } }) {
 			type: "religious"
 		},
 		{
-			title: "something",
-			description: "something",
+			title: "TOur Name",
+			description: "TOur Name",
 			departure: new Date().toISOString().slice(0, 10),
 			arrival: new Date().toISOString().slice(0, 10),
 			organizerID: "1234567890",
@@ -197,7 +199,14 @@ const Trips = ({
 			{tours.map((tour: any, index: number) => (
 				<div className="min-h-56 bg-secondary w-full rounded-lg p-4 flex lg:flex-row flex-col gap-2 justify-center lg:items-center items-start">
 					<div className="lg:w-1/6 h-full justify-start lg:justify-center items-center flex lg:flex-col gap-4">
-						<div className="h-20 rounded-full aspect-square bg-primary"></div>
+						<div className="h-20 rounded-full aspect-square relative">
+							<Image
+								src={Kaaba}
+								fill
+								alt="Tour Image"
+								className="object-contain"
+							/>
+						</div>
 						<h1 className="text-2xl font-semibold ">{tour.title}</h1>
 					</div>
 					<div className="flex flex-row h-full justify-between lg:justify-center items-center gap-10 lg:w-4/6">
