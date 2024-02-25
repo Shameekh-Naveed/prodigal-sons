@@ -7,6 +7,7 @@ import { FaCalendar } from "react-icons/fa"
 import { IoMdMoon } from "react-icons/io"
 import { MdOutlineFlightTakeoff } from "react-icons/md"
 import Image from "next/image"
+import { toast } from "sonner"
 
 function DataDisplay({ tripSlug, tourID }: { tripSlug: any; tourID: any }) {
 	const [trip, setTrip] = useState({} as any)
@@ -22,6 +23,28 @@ function DataDisplay({ tripSlug, tourID }: { tripSlug: any; tourID: any }) {
 			setTrip(output)
 			return output
 		} catch (error) {}
+	}
+
+	const register = async () => {
+		const body = {
+			bill: trip.price,
+			bookingCount: 1
+		}
+		try {
+			const res = await fetch("/api/tour/register", {
+				method: "POST",
+				body: JSON.stringify(body)
+			})
+			const parsedRes = await res.json()
+			if (!res.ok) {
+				toast.error(parsedRes.message)
+				toast.error(parsedRes.error)
+			} else {
+				toast.success("Successfully registered for tour")
+			}
+		} catch (error) {
+			toast.error("Sorry! An unexpected error occured")
+		}
 	}
 	useEffect(() => {
 		fetchData()
@@ -124,7 +147,7 @@ function DataDisplay({ tripSlug, tourID }: { tripSlug: any; tourID: any }) {
 				<div className="flex flex-col items-end gap-4">
 					<h2 className="text-2xl font-semibold">Rs. {trip.totalAmount}</h2>
 					<div>
-						<Button>Checkout</Button>
+						<Button onClick={register}>Checkout</Button>
 					</div>
 				</div>
 			</div>

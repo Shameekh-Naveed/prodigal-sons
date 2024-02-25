@@ -7,7 +7,7 @@ const userSchema = new Schema(
 		lastName: { type: String, required: true },
 		email: { type: String, required: true },
 		password: { type: String, required: true },
-		phoneNumber: { type: String, required: true },
+		phoneNumber: { type: String },
 		status: {
 			type: String,
 			enum: UserStatus,
@@ -20,7 +20,10 @@ const userSchema = new Schema(
 			required: true,
 			default: UserRole.USER
 		},
-		profilePicture: { type: String },
+		profilePicture: {
+			type: String,
+			default: "https://static.thenounproject.com/png/4035889-200.png"
+		},
 		preferences: [
 			{
 				type: String,

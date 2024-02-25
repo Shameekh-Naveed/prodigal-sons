@@ -21,12 +21,35 @@
 			"label": "Settings"
 		}
 	],
+	"footer": {
+		"links": [
+			{
+				"href": "/home",
+				"label": "Home"
+			},
+			{
+				"href": "/about",
+				"label": "About"
+			},
+			{
+				"href": "/contact",
+				"label": "Contact"
+			},
+			{
+				"href": "/blog",
+				"label": "Blog"
+			},
+			{
+				"href": "/projects",
+				"label": "Projects"
+			}
+		]
+	},
 	"home": {
 		"banner": {
 			"headline": "Your adventure awaits you"
 		}
 	},
-	"footer": {},
 	"trips": {
 		"banner": {
 			"headline": "headline",
