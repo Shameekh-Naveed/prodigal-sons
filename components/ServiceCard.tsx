@@ -1,4 +1,12 @@
-const ServiceCard = ({ title, description, icon }: any) => {
+
+interface ServiceCardProps {
+	title: string
+	description: string
+	icon: React.ReactNode
+}
+
+const ServiceCard = ({ title, description, icon }: ServiceCardProps) => {
+
 	return (
 		<div className="flex flex-col justify-center p-8 rounded-lg w-[30rem] ">
 			<div className="flex gap-4 items-center">
