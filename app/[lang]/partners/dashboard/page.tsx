@@ -17,77 +17,74 @@ import { redirect } from "next/navigation"
 import { authOptions } from "@/utils/auth"
 import { getServerSession } from "next-auth/next"
 import { useEffect } from "react"
+import { getSession } from "next-auth/react"
 
-export const metadata: Metadata = {
-	title: "Dashboard",
-	description: "Example dashboard app built using the components."
-}
-
-export default async function DashboardPage() {
-	const session = await getServerSession(authOptions)
+export default function DashboardPage() {
+	const session = getSession()
 	if (!session) {
 		redirect("/signin")
 	}
+
 	const data = [
 		{
 			name: "Jan",
-			total: Math.floor(Math.random() * 5000) + 1000,
-			sales: Math.floor(Math.random() * 5000) + 1000
+			total: 124728,
+			sales: 3423509
 		},
 		{
 			name: "Feb",
-			total: Math.floor(Math.random() * 5000) + 1000,
-			sales: Math.floor(Math.random() * 5000) + 1000
+			total: 124728,
+			sales: 3423509
 		},
 		{
 			name: "Mar",
-			total: Math.floor(Math.random() * 5000) + 1000,
-			sales: Math.floor(Math.random() * 5000) + 1000
+			total: 124728,
+			sales: 3423509
 		},
 		{
 			name: "Apr",
-			total: Math.floor(Math.random() * 5000) + 1000,
-			sales: Math.floor(Math.random() * 5000) + 1000
+			total: 124728,
+			sales: 3423509
 		},
 		{
 			name: "May",
-			total: Math.floor(Math.random() * 5000) + 1000,
-			sales: Math.floor(Math.random() * 5000) + 1000
+			total: 124728,
+			sales: 3423509
 		},
 		{
 			name: "Jun",
-			total: Math.floor(Math.random() * 5000) + 1000,
-			sales: Math.floor(Math.random() * 5000) + 1000
+			total: 124728,
+			sales: 3423509
 		},
 		{
 			name: "Jul",
-			total: Math.floor(Math.random() * 5000) + 1000,
-			sales: Math.floor(Math.random() * 5000) + 1000
+			total: 124728,
+			sales: 3423509
 		},
 		{
 			name: "Aug",
-			total: Math.floor(Math.random() * 5000) + 1000,
-			sales: Math.floor(Math.random() * 5000) + 1000
+			total: 124728,
+			sales: 3423509
 		},
 		{
 			name: "Sep",
-			total: Math.floor(Math.random() * 5000) + 1000,
-			sales: Math.floor(Math.random() * 5000) + 1000
+			total: 124728,
+			sales: 3423509
 		},
 		{
 			name: "Oct",
-			total: Math.floor(Math.random() * 5000) + 1000,
-			sales: Math.floor(Math.random() * 5000) + 1000
+			total: 124728,
+			sales: 3423509
 		},
 		{
 			name: "Nov",
-			total: Math.floor(Math.random() * 5000) + 1000,
-			sales: Math.floor(Math.random() * 5000) + 1000
+			total: 124728,
+			sales: 3423509
 		},
 		{
 			name: "Dec",
-			total: Math.floor(Math.random() * 5000) + 1000,
-			sales: Math.floor(Math.random() * 5000) + 1000
+			total: 124728,
+			sales: 3423509
 		}
 	]
 
@@ -109,15 +106,10 @@ export default async function DashboardPage() {
 			link: "/tours/1"
 		}
 	]
+
+	useEffect(() => {}, [])
 	// const { registerations, revenue, registerationsArr } = await fetchStats()
 	// const request = await fetchReservations()
-
-	useEffect(() => {
-		console.log("inside")
-		fetchStats().then(data => {
-			console.log({ data })
-		})
-	}, [])
 
 	return (
 		<main className="min-h-[calc(100vh-192px)]">

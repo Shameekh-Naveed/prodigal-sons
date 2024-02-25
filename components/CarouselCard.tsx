@@ -24,7 +24,7 @@ const Card = ({ name, description, image, link }: CardProps) => {
 				<h2 className="font-bold text-xl">{name || "Lahore"}</h2>
 				<p className="text-md">{description || "Lahore Lahore ae"}</p>
 				<Button className="">
-					<Link href={link || "/home"}>Visit now</Link>
+					<Link href={link}>Visit now</Link>
 				</Button>
 			</div>
 		</div>

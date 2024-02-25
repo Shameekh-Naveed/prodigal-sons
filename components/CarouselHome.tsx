@@ -27,7 +27,7 @@ export default function CarouselHome() {
 							description={tour.description as string}
 							image={tour.image as string}
 							// @ts-ignore
-							link={`/tour/${tour._id as string}`}
+							link={`/tours/${tour._id as string}`}
 						/>
 					</CarouselItem>
 				))}
@@ -40,9 +40,7 @@ export default function CarouselHome() {
 
 const fetchData = async () => {
 	try {
-		const res = await fetch(
-			`${process.env.NEXT_PUBLIC_HOST}api/tour/trending`
-		)
+		const res = await fetch(`${process.env.NEXT_PUBLIC_HOST}api/tour/trending`)
 		const parsedRes = await res.json()
 		if (!res.ok) {
 			toast.error(parsedRes.message)
