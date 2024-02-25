@@ -1,19 +1,13 @@
 import { UserModel } from "@/app/database/schemas/user.schema"
+import { UserRole } from "@/app/enums/user.enum"
 import db from "@/utils/db"
 import { hashPassword } from "@/utils/hash"
 import { NextRequest, NextResponse } from "next/server"
 
 export async function POST(request: NextRequest) {
 	const req = await request.json()
-	const {
-		firstName,
-		lastName,
-		email,
-		password,
-		phoneNumber,
-		role,
-		profilePicture
-	} = req
+	const { firstName, lastName, email, password, phoneNumber, role, profilePicture } =
+		req
 
 	try {
 		await db.connect()
@@ -34,7 +28,7 @@ export async function POST(request: NextRequest) {
 			email,
 			password: hashedPassword,
 			phoneNumber,
-			role
+			role: role || UserRole.USER
 		})
 		await user.save()
 		return NextResponse.json({
