@@ -10,7 +10,7 @@
 		},
 		{
 			"href": "/tours/custom",
-			"label": "Design Custom Tour"
+			"label": "Custom Tours"
 		},
 		{
 			"href": "/quwa",
@@ -24,24 +24,24 @@
 	"footer": {
 		"links": [
 			{
-				"href": "/home",
+				"href": "/",
 				"label": "Home"
 			},
 			{
-				"href": "/about",
-				"label": "About"
+				"href": "/tours",
+				"label": "Tours"
 			},
 			{
 				"href": "/contact",
-				"label": "Contact"
+				"label": "Custom Tours"
 			},
 			{
-				"href": "/blog",
-				"label": "Blog"
+				"href": "/quwa",
+				"label": "Quwa"
 			},
 			{
-				"href": "/projects",
-				"label": "Projects"
+				"href": "/settings",
+				"label": "Settings"
 			}
 		]
 	},
