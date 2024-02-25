@@ -12,7 +12,6 @@ import { PaymentStatus } from "@/app/enums/payment.enum"
 
 const createRoles = [[UserStatus.APPROVED, UserRole.ADMIN]]
 
-// * Get all organizers
 export async function GET(request: NextRequest) {
 	try {
 		const req = await request.json()
@@ -62,27 +61,53 @@ export async function GET(request: NextRequest) {
 				}
 			}
 		])
-
+		const months = [
+			"Jan",
+			"Feb",
+			"March",
+			"April",
+			"May",
+			"June",
+			"July",
+			"Aug",
+			"Sept",
+			"Oct",
+			"Nov",
+			"Dec"
+		]
 		const month = new Date().getMonth()
 		let revenueMonth = 0,
 			revenuePrev = 0,
 			registerationsMonth = 0,
 			registerationsPrev = 0
 
-		const registerations_month = []
-		const registerations_prev = []
+		const registerationsArr = []
+		const registerationsData = {} as any
 		registerations.forEach(registeration => {
-			const registerationMonth = registeration.createdAt.toString()
-			if (registerationMonth === month) {
+			const monthNum = registeration.createdAt.getMonth()
+			const registerationMonth = months[monthNum]
+
+			if (registerationsData[registerationMonth]) {
+				registerationsData[registerationMonth] += 1
+			} else {
+				registerationsData[registerationMonth] = 1
+			}
+
+			if (monthNum === month) {
 				registerationsMonth++
 				if (registeration.paymentStatus === PaymentStatus.APPROVED)
 					revenueMonth += registeration.bill
-			} else if (registerationMonth === month - 1) {
+			} else if (monthNum === month - 1) {
 				registerationsPrev++
 				if (registeration.paymentStatus === PaymentStatus.APPROVED)
 					revenuePrev += registeration.bill
 			}
 		})
+
+		// Loop over the registerations object and make an array of objects with month and count
+		for (const month in registerationsData) {
+			registerationsArr.push({ month, count: registerationsData[month] })
+		}
 
 		const stats = {
 			registerations: {
@@ -92,7 +117,8 @@ export async function GET(request: NextRequest) {
 			revenue: {
 				curr: revenueMonth,
 				prev: revenuePrev
-			}
+			},
+			registerationsArr
 		}
 
 		// Return success response
@@ -117,6 +143,6 @@ export async function GET(request: NextRequest) {
 		)
 	} finally {
 		// Disconnect from the database
-		await db.disconnect()
+		// await db.disconnect()
 	}
 }

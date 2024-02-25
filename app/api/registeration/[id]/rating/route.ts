@@ -6,23 +6,17 @@ import { getToken } from "next-auth/jwt"
 import { checkRoles } from "@/app/utils/auth"
 import { TourModel } from "@/app/database/schemas/tour.schema"
 import { JwtInterface } from "@/app/interfaces/jwt.interface"
-import { TourStatus } from "@/app/enums/tour.enum"
-import { paginationParser } from "@/utils/query-parser"
 
 const createRoles = [[UserStatus.APPROVED, UserRole.USER]]
 
-// * Get all requested tours
-export async function GET(request: NextRequest, { params }: any) {
+export async function POST(request: NextRequest, { params }: any) {
 	try {
+		const registerationID = params.id as ObjectId
+		const req = await request.json()
+		const { rating } = req
 		await db.connect()
 
-		const { searchParams } = new URL(request.url)
-		const pageParam = +(searchParams.get("page") || 0)
-		const limitParam = +(searchParams.get("limit") || 0)
-		const [limit, skip] = paginationParser(pageParam, limitParam)
-
 		// Get the JWT token from the request
-		// TODO: Deal with the jwt type
 		const JwtToken = await getToken({
 			req: request,
 			secret: process.env.JWT_SECRET
@@ -40,19 +34,41 @@ export async function GET(request: NextRequest, { params }: any) {
 			)
 		}
 		const authToken = JwtToken.accessToken as JwtInterface
+		const userID = authToken.user._id
 
-		const organizerID = authToken.user._id
+		const registeration = await TourModel.findById(registerationID)
 
-		// get all tours
-		const tours = await TourModel.find({ organizerID })
+		if (!registeration)
+			return NextResponse.json(
+				{
+					success: false,
+					message: "Registeration not found",
+					error: "Registeration not found"
+				},
+				{ status: 404 }
+			)
+
+		if (registeration.userID.toString() !== userID.toString())
+			return NextResponse.json(
+				{
+					success: false,
+					message: "Unauthorized",
+					error: "You do not have permission to perform this action"
+				},
+				{ status: 401 }
+			)
+
+		registeration.rating = rating
+
+		await registeration.save()
 
 		// Return success response
 		return NextResponse.json(
 			{
 				success: true,
-				message: "Tours fetched succesfully",
+				message: "Review added successfully",
 				data: {
-					tours
+					message: "Success"
 				}
 			},
 			{ status: 200 }
@@ -61,7 +77,7 @@ export async function GET(request: NextRequest, { params }: any) {
 		return NextResponse.json(
 			{
 				success: false,
-				message: "An error occurred while fetching the tours",
+				message: "An error occurred while fetching the tour",
 				error: error?.message || "Internal Server Error"
 			},
 			{ status: 500 }

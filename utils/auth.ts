@@ -16,7 +16,6 @@ export const authOptions: NextAuthOptions = {
 	},
 	callbacks: {
 		async jwt({ token, user }) {
-			console.log("here")
 			if (user) token.accessToken = user
 			return token
 		}

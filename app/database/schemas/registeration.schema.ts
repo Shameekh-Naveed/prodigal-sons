@@ -1,6 +1,7 @@
 import { PaymentStatus } from "@/app/enums/payment.enum"
 import { UserRole, UserStatus } from "@/app/enums/user.enum"
 import { Schema, InferSchemaType, model, models } from "mongoose"
+import { number } from "zod"
 
 const registerationSchema = new Schema(
 	{
@@ -26,12 +27,16 @@ const registerationSchema = new Schema(
 		bookingCount: {
 			type: Number,
 			default: 1
+		},
+		rating: {
+			type: Number
 		}
 	},
 	{ timestamps: true }
 )
 
 type Registeration = InferSchemaType<typeof registerationSchema>
-const RegisterationModel = model("Registeration", registerationSchema)
+const RegisterationModel =
+	models.Registeration || model("Registeration", registerationSchema)
 
 export { RegisterationModel }

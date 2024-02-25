@@ -65,6 +65,6 @@ export async function POST(request: NextRequest) {
 		)
 	} finally {
 		// Disconnect from the database
-		await db.disconnect()
+		// await db.disconnect()
 	}
 }

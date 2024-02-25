@@ -7,6 +7,8 @@ import Footer from "@/components/Footer"
 import Providers from "@/components/Providers"
 import { getDictionary } from "../../lib/dictionaries"
 import { Toaster } from "sonner"
+import { getServerSession } from "next-auth"
+import { authOptions } from "@/utils/auth"
 
 const inter = Inter({
 	subsets: ["latin"],
@@ -29,6 +31,7 @@ export default async function RootLayout({
 	children: React.ReactNode
 	params: { lang: Locale }
 }>) {
+	const session = await getServerSession(authOptions)
 	const { header, footer } = await getDictionary(params.lang)
 	return (
 		<html lang={params.lang}>

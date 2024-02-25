@@ -1,28 +1,29 @@
 import { NextRequest, NextResponse } from "next/server"
 import { ObjectId } from "mongoose"
 import { UserRole, UserStatus } from "@/app/enums/user.enum"
-import db from "@/utils/db"
 import { getToken } from "next-auth/jwt"
 import { checkRoles } from "@/app/utils/auth"
 import { TourModel } from "@/app/database/schemas/tour.schema"
 import { JwtInterface } from "@/app/interfaces/jwt.interface"
-import { TourStatus } from "@/app/enums/tour.enum"
+import { TripSort } from "@/app/enums/filterParams.enum"
+import { TourStatus, TourTypes } from "@/app/enums/tour.enum"
+import db from "@/utils/db"
 import { paginationParser } from "@/utils/query-parser"
+import { RegisterationModel } from "@/app/database/schemas/registeration.schema"
 
 const createRoles = [[UserStatus.APPROVED, UserRole.USER]]
 
-// * Get all requested tours
-export async function GET(request: NextRequest, { params }: any) {
+// * Create a new reservation
+export async function POST(request: NextRequest, { params }: any) {
 	try {
+		const req = await request.json()
+		const { bill, bookingCount } = req
+		const tourID = params.id as ObjectId
+
+		// Connect to the database
 		await db.connect()
 
-		const { searchParams } = new URL(request.url)
-		const pageParam = +(searchParams.get("page") || 0)
-		const limitParam = +(searchParams.get("limit") || 0)
-		const [limit, skip] = paginationParser(pageParam, limitParam)
-
 		// Get the JWT token from the request
-		// TODO: Deal with the jwt type
 		const JwtToken = await getToken({
 			req: request,
 			secret: process.env.JWT_SECRET
@@ -40,28 +41,38 @@ export async function GET(request: NextRequest, { params }: any) {
 			)
 		}
 		const authToken = JwtToken.accessToken as JwtInterface
+		const userID = authToken.user._id
 
-		const organizerID = authToken.user._id
+		// Create a new tour
+		const registeration = new RegisterationModel({
+			userID,
+			tourID,
+			bill,
+			bookingCount
+		})
 
-		// get all tours
-		const tours = await TourModel.find({ organizerID })
+		// Save the order to the database
+		await registeration.save()
 
 		// Return success response
 		return NextResponse.json(
 			{
 				success: true,
-				message: "Tours fetched succesfully",
+				message: "registeration initalized successfully",
 				data: {
-					tours
+					registeration: {
+						_id: registeration._id
+					}
 				}
 			},
-			{ status: 200 }
+			{ status: 201 }
 		)
 	} catch (error: any) {
+		console.log({ error })
 		return NextResponse.json(
 			{
 				success: false,
-				message: "An error occurred while fetching the tours",
+				message: "An error occurred while creating the registeration",
 				error: error?.message || "Internal Server Error"
 			},
 			{ status: 500 }

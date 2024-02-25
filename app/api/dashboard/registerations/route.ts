@@ -20,7 +20,6 @@ export async function GET(request: NextRequest) {
 		await db.connect()
 
 		// Get the JWT token from the request
-		// TODO: Deal with the jwt type
 		const JwtToken = await getToken({
 			req: request,
 			secret: process.env.JWT_SECRET
@@ -57,11 +56,10 @@ export async function GET(request: NextRequest) {
 			},
 			{
 				$match: {
-					// "$tour.organizerID": new Types.ObjectId(organizerID.toString())
-					organizerID: new Types.ObjectId(organizerID.toString())
+					"tour.organizerID": new Types.ObjectId(organizerID.toString())
 				}
 			},
-			{ $sort: { createdAt: -1 } },
+			// { $sort: { createdAt: -1 } },
 			{ $skip: 0 },
 			{ $limit: 5 }
 		])
@@ -88,6 +86,6 @@ export async function GET(request: NextRequest) {
 		)
 	} finally {
 		// Disconnect from the database
-		await db.disconnect()
+		// await db.disconnect()
 	}
 }
