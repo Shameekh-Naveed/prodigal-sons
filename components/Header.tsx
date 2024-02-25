@@ -13,6 +13,8 @@ import { useAtom, useSetAtom } from "jotai"
 import { LoggedInAtom, UserAtom } from "@/utils/atoms"
 import Image from "next/image"
 import { Session } from "next-auth"
+import Default from "@/assets/default.jpg"
+import Logo from "@/assets/log.png"
 
 export default function Header({
 	header,
@@ -64,7 +66,15 @@ export default function Header({
 		<header className="h-24 bg-secondary flex">
 			<div className="container flex justify-between items-center mx-auto">
 				<div>
-					<FcIcons8Cup className="text-4xl" />
+					<Image
+						id="avatarButton"
+						className=" rounded-full cursor-pointer"
+						width={140}
+						height={140}
+						// @ts-ignore
+						src={Logo}
+						alt="User dropdown"
+					/>
 				</div>
 				<div className="md:flex flex-row gap-6 -mb-3 hidden">
 					{links.map(({ href, label }) => (
@@ -105,11 +115,11 @@ export default function Header({
 								<div onClick={() => toggleMenu()}>
 									<Image
 										id="avatarButton"
-										className="w-10 h-10 rounded-full cursor-pointer"
-										width={40}
-										height={40}
+										className=" rounded-full cursor-pointer"
+										width={90}
+										height={90}
 										// @ts-ignore
-										src={user?.profilePicture}
+										src={Default}
 										alt="User dropdown"
 									/>
 								</div>
