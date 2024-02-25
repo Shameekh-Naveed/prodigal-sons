@@ -5,7 +5,7 @@ import Link from "next/link"
 interface CardProps {
 	name: string
 	description: string
-	image: string
+	image: any
 	link: string
 }
 

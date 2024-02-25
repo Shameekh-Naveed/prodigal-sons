@@ -10,6 +10,7 @@ import {
 import Card from "./CarouselCard"
 import { toast } from "sonner"
 import { Tour } from "@/app/database/schemas/tour.schema"
+import Kaaba from "@/assets/kaaba.png"
 
 export default function CarouselHome() {
 	const [data, setData] = useState([])
@@ -25,7 +26,7 @@ export default function CarouselHome() {
 						<Card
 							name={tour.title as string}
 							description={tour.description as string}
-							image={tour.image as string}
+							image={Kaaba}
 							// @ts-ignore
 							link={`/tours/${tour._id as string}`}
 						/>
