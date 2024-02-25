@@ -1,7 +1,5 @@
 import { PaymentStatus } from "@/app/enums/payment.enum"
-import { UserRole, UserStatus } from "@/app/enums/user.enum"
 import { Schema, InferSchemaType, model, models } from "mongoose"
-import { number } from "zod"
 
 const registerationSchema = new Schema(
 	{

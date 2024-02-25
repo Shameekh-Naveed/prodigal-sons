@@ -10,6 +10,7 @@ import {
 import Card from "./CarouselCard"
 import { toast } from "sonner"
 import { Tour } from "@/app/database/schemas/tour.schema"
+import Kaaba from "@/assets/kaaba.png"
 
 export default function CarouselHome() {
 	const [data, setData] = useState([])
@@ -25,9 +26,9 @@ export default function CarouselHome() {
 						<Card
 							name={tour.title as string}
 							description={tour.description as string}
-							image={tour.image as string}
+							image={Kaaba}
 							// @ts-ignore
-							link={`/tour/${tour._id as string}`}
+							link={`/tours/${tour._id as string}`}
 						/>
 					</CarouselItem>
 				))}
@@ -40,9 +41,9 @@ export default function CarouselHome() {
 
 const fetchData = async () => {
 	try {
-		const res = await fetch(
-			`${process.env.NEXT_PUBLIC_HOST}api/tour/trending`
-		)
+		const res = await fetch(`${process.env.NEXT_PUBLIC_HOST}api/tour/trending`, {
+			cache: "no-store"
+		})
 		const parsedRes = await res.json()
 		if (!res.ok) {
 			toast.error(parsedRes.message)

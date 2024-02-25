@@ -1,5 +1,6 @@
 import { UserRole, UserStatus } from "@/app/enums/user.enum"
 import { Schema, InferSchemaType, model, models } from "mongoose"
+import mongoose from "mongoose"
 
 const userSchema = new Schema(
 	{
@@ -12,7 +13,7 @@ const userSchema = new Schema(
 			type: String,
 			enum: UserStatus,
 			required: true,
-			default: UserStatus.PENDING
+			default: UserStatus.APPROVED
 		},
 		role: {
 			type: String,
@@ -35,7 +36,7 @@ const userSchema = new Schema(
 )
 
 type User = InferSchemaType<typeof userSchema>
-const UserModel = models.User || model("User", userSchema)
+const UserModel = models?.User || model("User", userSchema)
 // const UserModel = model("User", userSchema)
 
 export { UserModel }

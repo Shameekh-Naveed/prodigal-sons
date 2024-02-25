@@ -13,81 +13,87 @@ import { RecentSales } from "./components/recent-sales"
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
 import { TourCategory } from "@/app/enums/tour.enum"
+import {
+	Sheet,
+	SheetContent,
+	SheetDescription,
+	SheetHeader,
+	SheetTitle,
+	SheetTrigger
+} from "@/components/ui/sheet"
+import CustomForm from "./components/CustomForm"
 import { redirect } from "next/navigation"
 import { authOptions } from "@/utils/auth"
 import { getServerSession } from "next-auth/next"
 import { useEffect } from "react"
+import { getSession } from "next-auth/react"
 
-export const metadata: Metadata = {
-	title: "Dashboard",
-	description: "Example dashboard app built using the components."
-}
-
-export default async function DashboardPage() {
-	const session = await getServerSession(authOptions)
+export default function DashboardPage() {
+	const session = getSession()
 	if (!session) {
 		redirect("/signin")
 	}
+
 	const data = [
 		{
 			name: "Jan",
-			total: Math.floor(Math.random() * 5000) + 1000,
-			sales: Math.floor(Math.random() * 5000) + 1000
+			total: 124728,
+			sales: 3423509
 		},
 		{
 			name: "Feb",
-			total: Math.floor(Math.random() * 5000) + 1000,
-			sales: Math.floor(Math.random() * 5000) + 1000
+			total: 124728,
+			sales: 3423509
 		},
 		{
 			name: "Mar",
-			total: Math.floor(Math.random() * 5000) + 1000,
-			sales: Math.floor(Math.random() * 5000) + 1000
+			total: 124728,
+			sales: 3423509
 		},
 		{
 			name: "Apr",
-			total: Math.floor(Math.random() * 5000) + 1000,
-			sales: Math.floor(Math.random() * 5000) + 1000
+			total: 124728,
+			sales: 3423509
 		},
 		{
 			name: "May",
-			total: Math.floor(Math.random() * 5000) + 1000,
-			sales: Math.floor(Math.random() * 5000) + 1000
+			total: 124728,
+			sales: 3423509
 		},
 		{
 			name: "Jun",
-			total: Math.floor(Math.random() * 5000) + 1000,
-			sales: Math.floor(Math.random() * 5000) + 1000
+			total: 124728,
+			sales: 3423509
 		},
 		{
 			name: "Jul",
-			total: Math.floor(Math.random() * 5000) + 1000,
-			sales: Math.floor(Math.random() * 5000) + 1000
+			total: 124728,
+			sales: 3423509
 		},
 		{
 			name: "Aug",
-			total: Math.floor(Math.random() * 5000) + 1000,
-			sales: Math.floor(Math.random() * 5000) + 1000
+			total: 124728,
+			sales: 3423509
 		},
 		{
 			name: "Sep",
-			total: Math.floor(Math.random() * 5000) + 1000,
-			sales: Math.floor(Math.random() * 5000) + 1000
+			total: 124728,
+			sales: 3423509
 		},
 		{
 			name: "Oct",
-			total: Math.floor(Math.random() * 5000) + 1000,
-			sales: Math.floor(Math.random() * 5000) + 1000
+			total: 124728,
+			sales: 3423509
 		},
 		{
 			name: "Nov",
-			total: Math.floor(Math.random() * 5000) + 1000,
-			sales: Math.floor(Math.random() * 5000) + 1000
+			total: 124728,
+			sales: 3423509
 		},
 		{
 			name: "Dec",
-			total: Math.floor(Math.random() * 5000) + 1000,
-			sales: Math.floor(Math.random() * 5000) + 1000
+			total: 124728,
+			sales: 3423509
 		}
 	]
 
@@ -109,15 +115,6 @@ export default async function DashboardPage() {
 			link: "/tours/1"
 		}
 	]
-	// const { registerations, revenue, registerationsArr } = await fetchStats()
-	// const request = await fetchReservations()
-
-	useEffect(() => {
-		console.log("inside")
-		fetchStats().then(data => {
-			console.log({ data })
-		})
-	}, [])
 
 	return (
 		<main className="min-h-[calc(100vh-192px)]">
@@ -125,6 +122,19 @@ export default async function DashboardPage() {
 				<div className="flex-1 space-y-4 p-8 pt-6">
 					<div className="flex items-center justify-between space-y-2">
 						<h2 className="text-3xl font-bold tracking-tight">Dashboard</h2>
+						<Sheet>
+							<SheetTrigger>
+								<Button>Organize a Tour</Button>
+							</SheetTrigger>
+							<SheetContent className="overflow-auto">
+								<SheetHeader>
+									<SheetTitle>Add details of the Tour</SheetTitle>
+									<SheetDescription>
+										<CustomForm />
+									</SheetDescription>
+								</SheetHeader>
+							</SheetContent>
+						</Sheet>
 					</div>
 					<Tabs defaultValue="overview" className="space-y-4">
 						<TabsContent value="overview" className="space-y-4">
@@ -266,19 +276,14 @@ const fetchReservations = async () => {
 
 // TODO: Test this
 const fetchStats = async () => {
-	console.log("process.env.NEXT_PUBLIC_HOST", process.env.NEXT_PUBLIC_HOST)
 	try {
-		const res = await fetch(`${process.env.NEXT_PUBLIC_HOST}api/dashboard/stats`, {
-			cache: "no-cache"
-		})
+		const res = await fetch(`${process.env.NEXT_PUBLIC_HOST}api/dashboard/stats`)
 		const parsedRes = await res.json()
-		if (!res.ok) return { a: 1, b: 2, c: 3 }
 		console.log({ parsedRes })
 		const data = parsedRes.data.stats
+		console.log({ data })
 		return data
 	} catch (error) {
 		console.log({ error })
-		const a = 1
-		return { a, b: a, c: a }
 	}
 }
