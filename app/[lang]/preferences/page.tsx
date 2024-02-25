@@ -3,8 +3,16 @@ import { Button } from "@/components/ui/button"
 import { useRouter } from "next/navigation"
 import { useState, useEffect } from "react"
 import { toast } from "sonner"
+import { authOptions } from "@/utils/auth"
+import { getServerSession } from "next-auth/next"
+import { redirect } from "next/navigation"
 
-const Preferences = () => {
+const Preferences = async () => {
+	const session = await getServerSession(authOptions)
+	if (!session) {
+		redirect("/signin")
+	}
+
 	const router = useRouter()
 
 	const [travelStyle, setTravelStyle] = useState([] as string[])
