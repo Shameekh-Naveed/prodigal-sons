@@ -18,7 +18,7 @@ export const metadata: Metadata = {
 	description: "Example dashboard app built using the components."
 }
 
-export default function DashboardPage() {
+export default async function DashboardPage() {
 	const data = [
 		{
 			name: "Jan",
@@ -101,14 +101,14 @@ export default function DashboardPage() {
 		}
 	]
 
+	const request = await fetchReservations()
+
 	return (
 		<main className="min-h-[calc(100vh-192px)]">
 			<div className="flex-col flex">
 				<div className="flex-1 space-y-4 p-8 pt-6">
 					<div className="flex items-center justify-between space-y-2">
-						<h2 className="text-3xl font-bold tracking-tight">
-							Dashboard
-						</h2>
+						<h2 className="text-3xl font-bold tracking-tight">Dashboard</h2>
 					</div>
 					<Tabs defaultValue="overview" className="space-y-4">
 						<TabsContent value="overview" className="space-y-4">
@@ -191,8 +191,7 @@ export default function DashboardPage() {
 									<CardHeader>
 										<CardTitle>Recent Sales</CardTitle>
 										<CardDescription>
-											You made{" "}
-											{data[data.length - 1].sales} sales
+											You made {data[data.length - 1].sales} sales
 											in the last month
 										</CardDescription>
 									</CardHeader>
@@ -219,9 +218,7 @@ export default function DashboardPage() {
 											<p className="text-xs leading-none text-muted-foreground"></p>
 										</div>
 										<Button className="font-medium">
-											<Link href={tour.link}>
-												View Details
-											</Link>
+											<Link href={tour.link}>View Details</Link>
 										</Button>
 									</div>
 								</div>
@@ -232,4 +229,14 @@ export default function DashboardPage() {
 			</div>
 		</main>
 	)
+}
+
+// TODO: Test this
+const fetchReservations = async () => {
+	const res = await fetch(`${process.env.NEXT_PUBLIC_HOST}api/dashboard/registerations`)
+	const parsedRes = await res.json()
+	console.log({ parsedRes })
+	const data = parsedRes.data.registerations
+	console.log({ data })
+	return data
 }

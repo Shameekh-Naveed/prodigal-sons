@@ -56,11 +56,10 @@ export async function GET(request: NextRequest) {
 			},
 			{
 				$match: {
-					// "$tour.organizerID": new Types.ObjectId(organizerID.toString())
-					organizerID: new Types.ObjectId(organizerID.toString())
+					"tour.organizerID": new Types.ObjectId(organizerID.toString())
 				}
 			},
-			{ $sort: { createdAt: -1 } },
+			// { $sort: { createdAt: -1 } },
 			{ $skip: 0 },
 			{ $limit: 5 }
 		])
