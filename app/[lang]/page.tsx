@@ -87,7 +87,7 @@ const Home = async ({ params }: { params: { lang: Locale } }) => {
 							"url('https://businessschool.luiss.it/tourism-management/wp-content/uploads/sites/4/2023/06/shutterstock_1774042925-scaled-e1686324435575.jpg')"
 					}}
 				>
-					<div className="absolute w-full h-full bg-black opacity-10"></div>
+					<div className="absolute w-full h-full bg-black opacity-10 rounded-2xl"></div>
 
 					<div className="flex flex-col justify-center w-2/3 z-20">
 						<h1 className="text-2xl md:text-4xl lg:text-4xl font-bold text-primary w-2/3 mb-8 pl-8">
@@ -115,14 +115,14 @@ const Home = async ({ params }: { params: { lang: Locale } }) => {
 				>
 					<div className="absolute w-full h-full bg-black opacity-30"></div>
 					<h1 className="text-4xl md:text-4xl lg:text-4xl font-bold text-white mb-4 z-10 pl-8">
-						Check out our religious packages
+						Checkout our Hajj and Umrah packages
 					</h1>
 					<h1 className="text-lg md:text-xl lg:text-xl font-bold text-white mb-4 z-10 pl-8">
 						We have a wide range of religious packages to suit all tastes.
 					</h1>
 					<div className="w-30 z-10 pl-8">
 						<Button className="bg-secondary text-primary hover:text-secondary px-4 py-2 w-30 font-bold mb-6 rounded-full ">
-							Explore now
+							Explore Quwa
 						</Button>
 					</div>
 				</div>
