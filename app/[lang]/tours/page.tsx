@@ -1,3 +1,4 @@
+"use client"
 import { Tour } from "@/app/database/schemas/tour.schema"
 import { TourCategory } from "@/app/enums/tour.enum"
 import { Button } from "@/components/ui/button"
@@ -7,24 +8,10 @@ import Link from "next/link"
 import { redirect } from "next/navigation"
 import { authOptions } from "@/utils/auth"
 import { getServerSession } from "next-auth/next"
-// import { useEffect, useState } from "react"
+import Filter from "@/components/Filter"
+import { Trips } from "@/components/Trips"
 
-export default async function Page({ params }: { params: { lang: Locale } }) {
-	const session = await getServerSession(authOptions)
-	if (!session) {
-		redirect("/signin")
-	}
-	const { trips } = await getDictionary(params.lang)
-
-	// const [tours, setTours] = useState([])
-	// useEffect(() => {
-	// 	fetchData().then(data => {
-	// 		setTours(tours)
-	// 	})
-	// }, [])
-
-	// const releTours = await fetchData(TourCategory.RELEGIOUS)
-	// const culTours = await fetchData(TourCategory.CULTURAL)
+export default function Page({ params }: { params: { lang: Locale } }) {
 	const releTours = [
 		{
 			title: "something",
@@ -61,6 +48,7 @@ export default async function Page({ params }: { params: { lang: Locale } }) {
 			type: "religious"
 		}
 	]
+
 	const culTours = [
 		{
 			title: "dsalksad;la",
@@ -131,7 +119,7 @@ export default async function Page({ params }: { params: { lang: Locale } }) {
 						</div>
 						<div className="flex justify-end items-end w-1/3 z-20 md:pr-8">
 							<Button className="bg-secondary text-primary hover:text-secondary px-4 py-2 w-30 font-bold mb-6 rounded-full">
-								<Link href={"/en/tours/custom"}>Design custom trip</Link>
+								<Link href={"/tours/custom"}>Design custom trip</Link>
 							</Button>
 						</div>
 					</div>
@@ -157,14 +145,13 @@ export default async function Page({ params }: { params: { lang: Locale } }) {
 						</div>
 						<div className="flex justify-end items-end w-1/3 z-20 md:pr-8">
 							<Button className="bg-secondary text-primary hover:text-secondary px-4 py-2 w-30 font-bold mb-6 rounded-full">
-								<Link href={"/en/quwa"}>Explore Quwa</Link>
+								<Link href={"/quwa"}>Explore Quwa</Link>
 							</Button>
 						</div>
 					</div>
 				</div>
-				<Trips tours={releTours} trips={trips} tripsKey={"religious-trips"} />
-				<Trips tours={culTours} trips={trips} tripsKey={"cultural-trips"} />
-				<Trips tours={culTours} trips={trips} tripsKey={"explore"} />
+				<Filter />
+				<Trips tours={releTours} />
 			</div>
 		</main>
 	)
@@ -187,54 +174,3 @@ const fetchData = async (category: TourCategory) => {
 		return []
 	}
 }
-
-const Trips = ({
-	tours,
-	trips,
-	tripsKey
-}: {
-	tours: any
-	trips: any
-	tripsKey: String
-}) => (
-	<div className="w-full flex flex-col gap-4">
-		<h3 className="text-start text-2xl">{trips[`${tripsKey}`].title}</h3>
-		<div className="gap-2 flex flex-col">
-			{tours.map((tour: any, index: number) => (
-				<div className="min-h-56 bg-secondary w-full rounded-lg p-4 flex lg:flex-row flex-col gap-2 justify-center lg:items-center items-start">
-					<div className="lg:w-1/6 h-full justify-start lg:justify-center items-center flex lg:flex-col gap-4">
-						<div className="h-20 rounded-full aspect-square bg-primary"></div>
-						<h1 className="text-2xl font-semibold ">{tour.title}</h1>
-					</div>
-					<div className="flex flex-row h-full justify-between lg:justify-center items-center gap-10 lg:w-4/6">
-						<div className="flex flex-col gap-2">
-							<h3 className="text-2xl font-semibold">
-								{trips[`${tripsKey}`].departure}
-							</h3>
-							<h2>{`${tour.arrival}`}</h2>
-						</div>
-						<div className="border border-primary w-64"></div>
-						<div className="flex flex-col gap-2">
-							<h3 className="text-2xl font-semibold">
-								{trips[`${tripsKey}`].arrival}
-							</h3>
-							<h2>{`${tour.departure}`}</h2>
-						</div>
-					</div>
-					<div className="flex lg:flex-col flex-row lg:w-1/6 lg:justify-center justify-start items-end gap-4">
-						<div>
-							<h2 className="text-2xl font-semibold">
-								{trips[`${tripsKey}`].price}
-							</h2>
-							<h3 className="text-lg">Rs. {tour.totalAmount}</h3>
-						</div>
-						<Button>{trips[`${tripsKey}`].details}</Button>
-					</div>
-				</div>
-			))}
-		</div>
-		<div className="w-full justify-center items-center flex">
-			<Button className="">Show More ...</Button>
-		</div>
-	</div>
-)

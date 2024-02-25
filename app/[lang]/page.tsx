@@ -101,7 +101,7 @@ const Home = async ({ params }: { params: { lang: Locale } }) => {
 					</div>
 					<div className="flex justify-end items-end w-1/3 z-20 md:pr-8">
 						<Button className="bg-secondary text-primary hover:text-secondary px-4 py-2 w-30 font-bold mb-6 rounded-full">
-							<Link href={"/en/tours/custom"}>Design custom trip</Link>
+							<Link href={"/tours/custom"}>Design custom trip</Link>
 						</Button>
 					</div>
 				</div>
@@ -123,7 +123,7 @@ const Home = async ({ params }: { params: { lang: Locale } }) => {
 					</h1>
 					<div className="w-30 z-10 pl-8">
 						<Button className="bg-secondary text-primary hover:text-secondary px-4 py-2 w-30 font-bold mb-6 rounded-full">
-							<Link href={"/en/quwa"}>Explore Quwa</Link>
+							<Link href={"/quwa"}>Explore Quwa</Link>
 						</Button>
 					</div>
 				</div>
