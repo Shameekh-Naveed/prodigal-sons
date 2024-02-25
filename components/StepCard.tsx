@@ -5,7 +5,6 @@ interface StepCardProps {
 }
 
 const StepCard = ({ step, name, method }: StepCardProps) => {
-
 	return (
 		<div className="w-[23rem] h-[16rem] rounded-3xl bg-white border border-gray-500 flex flex-col justify-center relative text-center items-center">
 			<div className="w-32 h-12 bg-white rounded-full absolute left-30 bottom-[14.5rem] border-purple-600 border-2">
