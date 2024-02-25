@@ -8,8 +8,6 @@ export default function YoutubeComponent() {
 	}
 
 	const opts: YouTubeProps["opts"] = {
-		height: "720",
-		width: "1280",
 		playerVars: {
 			autoplay: 1
 		}
@@ -20,7 +18,12 @@ export default function YoutubeComponent() {
 			<h2 className="text-5xl md:text-6xl 2xl:text-7xl font-bold text-center text-black mt-24 mb-4">
 				Pilgirms at Ka'aba
 			</h2>
-			<YouTube videoId="Rl8a0wQePCo" opts={opts} onReady={onPlayerReady} />
+			<YouTube
+				iframeClassName="aspect-[16/9] 2xl:h-[50rem] xl:h-[30rem] lg:h-[25rem] md:h-[20rem] sm:h-[15rem] h-[12rem]"
+				videoId="Rl8a0wQePCo"
+				opts={opts}
+				onReady={onPlayerReady}
+			/>
 		</div>
 	)
 }
