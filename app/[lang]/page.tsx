@@ -7,6 +7,7 @@ import { Locale } from "@/i18n.config"
 import { getDictionary } from "@/lib/dictionaries"
 import { Button } from "@/components/ui/button"
 import Places from "@/components/Places"
+import Link from "next/link"
 import { getServerSession } from "next-auth"
 import { authOptions } from "@/utils/auth"
 
@@ -100,7 +101,7 @@ const Home = async ({ params }: { params: { lang: Locale } }) => {
 					</div>
 					<div className="flex justify-end items-end w-1/3 z-20 md:pr-8">
 						<Button className="bg-secondary text-primary hover:text-secondary px-4 py-2 w-30 font-bold mb-6 rounded-full">
-							Explore now
+							<Link href={"/en/tours/custom"}>Design custom trip</Link>
 						</Button>
 					</div>
 				</div>
@@ -121,8 +122,8 @@ const Home = async ({ params }: { params: { lang: Locale } }) => {
 						We have a wide range of religious packages to suit all tastes.
 					</h1>
 					<div className="w-30 z-10 pl-8">
-						<Button className="bg-secondary text-primary hover:text-secondary px-4 py-2 w-30 font-bold mb-6 rounded-full ">
-							Explore Quwa
+						<Button className="bg-secondary text-primary hover:text-secondary px-4 py-2 w-30 font-bold mb-6 rounded-full">
+							<Link href={"/en/quwa"}>Explore Quwa</Link>
 						</Button>
 					</div>
 				</div>

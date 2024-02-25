@@ -13,9 +13,21 @@ import { RecentSales } from "./components/recent-sales"
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
 import { TourCategory } from "@/app/enums/tour.enum"
+import { redirect } from "next/navigation"
+import { authOptions } from "@/utils/auth"
+import { getServerSession } from "next-auth/next"
 import { useEffect } from "react"
 
-export default function DashboardPage() {
+export const metadata: Metadata = {
+	title: "Dashboard",
+	description: "Example dashboard app built using the components."
+}
+
+export default async function DashboardPage() {
+	const session = await getServerSession(authOptions)
+	if (!session) {
+		redirect("/signin")
+	}
 	const data = [
 		{
 			name: "Jan",

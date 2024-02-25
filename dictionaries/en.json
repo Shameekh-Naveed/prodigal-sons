@@ -1,32 +1,55 @@
 {
 	"header": [
 		{
-			"href": "/home",
+			"href": "/",
 			"label": "Home"
 		},
 		{
-			"href": "/about",
-			"label": "About"
+			"href": "/tours",
+			"label": "Tours"
 		},
 		{
-			"href": "/contact",
-			"label": "Contact"
+			"href": "/tours/custom",
+			"label": "Custom Tours"
 		},
 		{
-			"href": "/blog",
-			"label": "Blog"
+			"href": "/quwa",
+			"label": "Quwa"
 		},
 		{
-			"href": "/projects",
-			"label": "Projects"
+			"href": "/settings",
+			"label": "Settings"
 		}
 	],
+	"footer": {
+		"links": [
+			{
+				"href": "/",
+				"label": "Home"
+			},
+			{
+				"href": "/tours",
+				"label": "Tours"
+			},
+			{
+				"href": "/contact",
+				"label": "Custom Tours"
+			},
+			{
+				"href": "/quwa",
+				"label": "Quwa"
+			},
+			{
+				"href": "/settings",
+				"label": "Settings"
+			}
+		]
+	},
 	"home": {
 		"banner": {
 			"headline": "Your adventure awaits you"
 		}
 	},
-	"footer": {},
 	"trips": {
 		"banner": {
 			"headline": "headline",
