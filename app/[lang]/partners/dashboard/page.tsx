@@ -100,7 +100,7 @@ export default async function DashboardPage() {
 			link: "/tours/1"
 		}
 	]
-
+	const { registerations, revenue, registerationsArr } = await fetchStats()
 	const request = await fetchReservations()
 
 	return (
@@ -237,6 +237,16 @@ const fetchReservations = async () => {
 	const parsedRes = await res.json()
 	console.log({ parsedRes })
 	const data = parsedRes.data.registerations
+	console.log({ data })
+	return data
+}
+
+// TODO: Test this
+const fetchStats = async () => {
+	const res = await fetch(`${process.env.NEXT_PUBLIC_HOST}api/dashboard/stats`)
+	const parsedRes = await res.json()
+	console.log({ parsedRes })
+	const data = parsedRes.data.stats
 	console.log({ data })
 	return data
 }

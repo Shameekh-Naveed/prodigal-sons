@@ -17,8 +17,6 @@ export async function GET(request: NextRequest, { params }: any) {
 	try {
 		await db.connect()
 
-		console.log("inside here")
-
 		// Get the JWT token from the request
 		const JwtToken = await getToken({
 			req: request,
