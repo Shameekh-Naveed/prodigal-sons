@@ -9,8 +9,8 @@ import { Locale } from "@/i18n.config"
 import LangDropDown from "./LangDropDown"
 import { Button } from "./ui/button"
 import { getSession, signOut } from "next-auth/react"
-import { useAtom } from "jotai"
-import { LoggedInAtom } from "@/utils/atoms"
+import { useAtom, useSetAtom } from "jotai"
+import { LoggedInAtom, UserAtom } from "@/utils/atoms"
 import Image from "next/image"
 import { Session } from "next-auth"
 
@@ -28,6 +28,8 @@ export default function Header({
 	const [loggedIn, setLoggedIn] = useAtom(LoggedInAtom)
 	const [mounted, setMounted] = useState(false)
 	const menuRef = useRef<HTMLDivElement>(null)
+	const setUser = useSetAtom(UserAtom)
+
 	const links = [...header]
 	const toggleMenu = () => {
 		const menu = menuRef.current
@@ -42,7 +44,6 @@ export default function Header({
 
 	useEffect(() => {
 		getSession().then((session: Session | null) => {
-			console.log(session, "session")
 			if (session) {
 				setLoggedIn(true)
 			}
@@ -134,7 +135,12 @@ export default function Header({
 									</ul>
 									<div className="py-1">
 										<button
-											onClick={() => signOut()}
+											onClick={() => {
+												signOut()
+												setLoggedIn(false)
+												localStorage.removeItem("user")
+												setUser(null)
+											}}
 											className="block px-4 py-2 w-full text-start text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
 										>
 											Sign out
