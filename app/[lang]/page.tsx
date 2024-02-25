@@ -7,11 +7,9 @@ import { Locale } from "@/i18n.config"
 import { getDictionary } from "@/lib/dictionaries"
 import { Button } from "@/components/ui/button"
 import Places from "@/components/Places"
-import { getServerSession } from "next-auth"
-import { authOptions } from "@/utils/auth"
 
 const Home = async ({ params }: { params: { lang: Locale } }) => {
-	const { home } = await getDictionary(params.lang)
+	const { home, trips } = await getDictionary(params.lang)
 
 	return (
 		<main className="min-h-[calc(100vh-192px)] py-12">
@@ -34,10 +32,7 @@ const Home = async ({ params }: { params: { lang: Locale } }) => {
 						<h1 className=" sm:text-4xl 2xl:text-5xl max-2xl:text-center font-bold text-primary w-2/3 my-16">
 							Plan your trip now.
 						</h1>
-						<h1 className="sm:text-2xl 2xl:text-2xl max-2xl:text-center font-bold text-primary w-2/3 mb-8">
-							Get a personalized itinerary just for you, guided by traveler
-							tips and reviews.
-						</h1>
+						<h1 className="sm:text-2xl 2xl:text-2xl max-2xl:text-center font-bold text-primary w-2/3 mb-8"></h1>
 					</div>
 					<div className="w-full 2xl:w-1/2 flex items-center mb-16 justify-center">
 						<div className=" w-[60%] 2xl:w-full">
@@ -100,7 +95,7 @@ const Home = async ({ params }: { params: { lang: Locale } }) => {
 					</div>
 					<div className="flex justify-end items-end w-1/3 z-20 md:pr-8">
 						<Button className="bg-secondary text-primary hover:text-secondary px-4 py-2 w-30 font-bold mb-6 rounded-full">
-							Explore now
+							{/* {trips.tripsButton} */}
 						</Button>
 					</div>
 				</div>

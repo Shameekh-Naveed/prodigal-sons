@@ -32,6 +32,11 @@
 			"headline": "headline",
 			"subHeadline": "subHeadline"
 		},
+		"planTrip": "Plan your trip now?",
+		"planTripDesc": "Get a personalized itinerary just for you, guided by traveler tips and reviews.",
+		"topPackages": "Our Top Packages",
+		"popularDestinations": "Most Popular Destinations",
+		"exploreButton": "Explore Now",
 		"custom": "Want a custom trip?",
 		"religious-trips": {
 			"title": "Religious Trips",
