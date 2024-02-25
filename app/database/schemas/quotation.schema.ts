@@ -14,7 +14,7 @@ const quotationSchema = new Schema(
 			ref: "Tours",
 			required: true
 		},
-		quote: {
+		price: {
 			type: Number,
 			required: true
 		}
