@@ -7,7 +7,7 @@ export default function MapsComponent() {
 	useEffect(() => {
 		const initMap = async () => {
 			const loader = new Loader({
-				apiKey: "AIzaSyAB1EQb-2K8ZD5RFHpKnewx-t3zKZMI0PE",
+				apiKey: "",
 				version: "weekly"
 			})
 			const { Map } = await loader.importLibrary("maps")
